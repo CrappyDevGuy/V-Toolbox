@@ -1,0 +1,3 @@
+/home/dunkhey/workspace/CXX/project/cmake/CMakeFiles/rebuild_cache.dir
+/home/dunkhey/workspace/CXX/project/cmake/CMakeFiles/edit_cache.dir
+/home/dunkhey/workspace/CXX/project/cmake/CMakeFiles/myproject.dir
