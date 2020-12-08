@@ -1,4 +1,4 @@
-# Install script for directory: /home/dunkhey/workspace/CXX/project
+# Install script for directory: /home/dunkhey/workspace/CXX/V-Toolbox
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/dunkhey/workspace/CXX/project/cmake/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/dunkhey/workspace/CXX/V-Toolbox/cmake/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -67,10 +67,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dunkhey/workspace/CXX/project
+CMAKE_SOURCE_DIR = /home/dunkhey/workspace/CXX/V-Toolbox
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dunkhey/workspace/CXX/project/cmake
+CMAKE_BINARY_DIR = /home/dunkhey/workspace/CXX/V-Toolbox/cmake
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -99,9 +99,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dunkhey/workspace/CXX/project/cmake/CMakeFiles /home/dunkhey/workspace/CXX/project/cmake//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles /home/dunkhey/workspace/CXX/V-Toolbox/cmake//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dunkhey/workspace/CXX/project/cmake/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -142,6 +142,33 @@ myproject/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/build
 .PHONY : myproject/fast
 
+src/core/instance.o: src/core/instance.cpp.o
+
+.PHONY : src/core/instance.o
+
+# target to build an object file
+src/core/instance.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/instance.cpp.o
+.PHONY : src/core/instance.cpp.o
+
+src/core/instance.i: src/core/instance.cpp.i
+
+.PHONY : src/core/instance.i
+
+# target to preprocess a source file
+src/core/instance.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/instance.cpp.i
+.PHONY : src/core/instance.cpp.i
+
+src/core/instance.s: src/core/instance.cpp.s
+
+.PHONY : src/core/instance.s
+
+# target to generate assembly for a file
+src/core/instance.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/instance.cpp.s
+.PHONY : src/core/instance.cpp.s
+
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -178,6 +205,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... myproject"
+	@echo "... src/core/instance.o"
+	@echo "... src/core/instance.i"
+	@echo "... src/core/instance.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

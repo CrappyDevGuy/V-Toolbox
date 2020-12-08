@@ -6,5 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/dunkhey/workspace/CXX/project/src/main.cpp
+../include/core/instance.hpp
+
+/home/dunkhey/workspace/CXX/V-Toolbox/src/core/instance.cpp
+core/instance.hpp
+/home/dunkhey/workspace/CXX/V-Toolbox/src/core/core/instance.hpp
+
+/home/dunkhey/workspace/CXX/V-Toolbox/src/main.cpp
 

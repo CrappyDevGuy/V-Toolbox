@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/dunkhey/workspace/CXX/project/src -I/home/dunkhey/workspace/CXX/project/include
+CXX_INCLUDES = -I/home/dunkhey/workspace/CXX/V-Toolbox/src -I/home/dunkhey/workspace/CXX/V-Toolbox/include
 
 CXX_FLAGS = -std=gnu++2a
 
