@@ -93,12 +93,12 @@ clean: CMakeFiles/myproject.dir/clean
 CMakeFiles/myproject.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles --progress-num=1,2,3 "Built target myproject"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles --progress-num=1,2,3,4,5 "Built target myproject"
 .PHONY : CMakeFiles/myproject.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/myproject.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/myproject.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles 0
 .PHONY : CMakeFiles/myproject.dir/rule

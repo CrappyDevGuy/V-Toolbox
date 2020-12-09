@@ -142,59 +142,113 @@ myproject/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/build
 .PHONY : myproject/fast
 
-src/core/instance.o: src/core/instance.cpp.o
+dependencies/volk.o: dependencies/volk.c.o
 
-.PHONY : src/core/instance.o
-
-# target to build an object file
-src/core/instance.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/instance.cpp.o
-.PHONY : src/core/instance.cpp.o
-
-src/core/instance.i: src/core/instance.cpp.i
-
-.PHONY : src/core/instance.i
-
-# target to preprocess a source file
-src/core/instance.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/instance.cpp.i
-.PHONY : src/core/instance.cpp.i
-
-src/core/instance.s: src/core/instance.cpp.s
-
-.PHONY : src/core/instance.s
-
-# target to generate assembly for a file
-src/core/instance.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/instance.cpp.s
-.PHONY : src/core/instance.cpp.s
-
-src/main.o: src/main.cpp.o
-
-.PHONY : src/main.o
+.PHONY : dependencies/volk.o
 
 # target to build an object file
-src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/main.cpp.o
-.PHONY : src/main.cpp.o
+dependencies/volk.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/dependencies/volk.c.o
+.PHONY : dependencies/volk.c.o
 
-src/main.i: src/main.cpp.i
+dependencies/volk.i: dependencies/volk.c.i
 
-.PHONY : src/main.i
+.PHONY : dependencies/volk.i
 
 # target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
+dependencies/volk.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/dependencies/volk.c.i
+.PHONY : dependencies/volk.c.i
 
-src/main.s: src/main.cpp.s
+dependencies/volk.s: dependencies/volk.c.s
 
-.PHONY : src/main.s
+.PHONY : dependencies/volk.s
 
 # target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
+dependencies/volk.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/dependencies/volk.c.s
+.PHONY : dependencies/volk.c.s
+
+samples/main.o: samples/main.cpp.o
+
+.PHONY : samples/main.o
+
+# target to build an object file
+samples/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/samples/main.cpp.o
+.PHONY : samples/main.cpp.o
+
+samples/main.i: samples/main.cpp.i
+
+.PHONY : samples/main.i
+
+# target to preprocess a source file
+samples/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/samples/main.cpp.i
+.PHONY : samples/main.cpp.i
+
+samples/main.s: samples/main.cpp.s
+
+.PHONY : samples/main.s
+
+# target to generate assembly for a file
+samples/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/samples/main.cpp.s
+.PHONY : samples/main.cpp.s
+
+src/core/VtInstance.o: src/core/VtInstance.cpp.o
+
+.PHONY : src/core/VtInstance.o
+
+# target to build an object file
+src/core/VtInstance.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/VtInstance.cpp.o
+.PHONY : src/core/VtInstance.cpp.o
+
+src/core/VtInstance.i: src/core/VtInstance.cpp.i
+
+.PHONY : src/core/VtInstance.i
+
+# target to preprocess a source file
+src/core/VtInstance.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/VtInstance.cpp.i
+.PHONY : src/core/VtInstance.cpp.i
+
+src/core/VtInstance.s: src/core/VtInstance.cpp.s
+
+.PHONY : src/core/VtInstance.s
+
+# target to generate assembly for a file
+src/core/VtInstance.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/VtInstance.cpp.s
+.PHONY : src/core/VtInstance.cpp.s
+
+src/core/io/VtLogHandler.o: src/core/io/VtLogHandler.cpp.o
+
+.PHONY : src/core/io/VtLogHandler.o
+
+# target to build an object file
+src/core/io/VtLogHandler.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o
+.PHONY : src/core/io/VtLogHandler.cpp.o
+
+src/core/io/VtLogHandler.i: src/core/io/VtLogHandler.cpp.i
+
+.PHONY : src/core/io/VtLogHandler.i
+
+# target to preprocess a source file
+src/core/io/VtLogHandler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.i
+.PHONY : src/core/io/VtLogHandler.cpp.i
+
+src/core/io/VtLogHandler.s: src/core/io/VtLogHandler.cpp.s
+
+.PHONY : src/core/io/VtLogHandler.s
+
+# target to generate assembly for a file
+src/core/io/VtLogHandler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.s
+.PHONY : src/core/io/VtLogHandler.cpp.s
 
 # Help Target
 help:
@@ -205,12 +259,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... myproject"
-	@echo "... src/core/instance.o"
-	@echo "... src/core/instance.i"
-	@echo "... src/core/instance.s"
-	@echo "... src/main.o"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
+	@echo "... dependencies/volk.o"
+	@echo "... dependencies/volk.i"
+	@echo "... dependencies/volk.s"
+	@echo "... samples/main.o"
+	@echo "... samples/main.i"
+	@echo "... samples/main.s"
+	@echo "... src/core/VtInstance.o"
+	@echo "... src/core/VtInstance.i"
+	@echo "... src/core/VtInstance.s"
+	@echo "... src/core/io/VtLogHandler.o"
+	@echo "... src/core/io/VtLogHandler.i"
+	@echo "... src/core/io/VtLogHandler.s"
 .PHONY : help
 
 

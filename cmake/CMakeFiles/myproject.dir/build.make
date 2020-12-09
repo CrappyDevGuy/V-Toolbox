@@ -76,45 +76,75 @@ include CMakeFiles/myproject.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/myproject.dir/flags.make
 
-CMakeFiles/myproject.dir/src/core/instance.cpp.o: CMakeFiles/myproject.dir/flags.make
-CMakeFiles/myproject.dir/src/core/instance.cpp.o: ../src/core/instance.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/myproject.dir/src/core/instance.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myproject.dir/src/core/instance.cpp.o -c /home/dunkhey/workspace/CXX/V-Toolbox/src/core/instance.cpp
+CMakeFiles/myproject.dir/dependencies/volk.c.o: CMakeFiles/myproject.dir/flags.make
+CMakeFiles/myproject.dir/dependencies/volk.c.o: ../dependencies/volk.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/myproject.dir/dependencies/volk.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/myproject.dir/dependencies/volk.c.o -c /home/dunkhey/workspace/CXX/V-Toolbox/dependencies/volk.c
 
-CMakeFiles/myproject.dir/src/core/instance.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myproject.dir/src/core/instance.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dunkhey/workspace/CXX/V-Toolbox/src/core/instance.cpp > CMakeFiles/myproject.dir/src/core/instance.cpp.i
+CMakeFiles/myproject.dir/dependencies/volk.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/myproject.dir/dependencies/volk.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/dunkhey/workspace/CXX/V-Toolbox/dependencies/volk.c > CMakeFiles/myproject.dir/dependencies/volk.c.i
 
-CMakeFiles/myproject.dir/src/core/instance.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myproject.dir/src/core/instance.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dunkhey/workspace/CXX/V-Toolbox/src/core/instance.cpp -o CMakeFiles/myproject.dir/src/core/instance.cpp.s
+CMakeFiles/myproject.dir/dependencies/volk.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/myproject.dir/dependencies/volk.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/dunkhey/workspace/CXX/V-Toolbox/dependencies/volk.c -o CMakeFiles/myproject.dir/dependencies/volk.c.s
 
-CMakeFiles/myproject.dir/src/main.cpp.o: CMakeFiles/myproject.dir/flags.make
-CMakeFiles/myproject.dir/src/main.cpp.o: ../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/myproject.dir/src/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myproject.dir/src/main.cpp.o -c /home/dunkhey/workspace/CXX/V-Toolbox/src/main.cpp
+CMakeFiles/myproject.dir/samples/main.cpp.o: CMakeFiles/myproject.dir/flags.make
+CMakeFiles/myproject.dir/samples/main.cpp.o: ../samples/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/myproject.dir/samples/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myproject.dir/samples/main.cpp.o -c /home/dunkhey/workspace/CXX/V-Toolbox/samples/main.cpp
 
-CMakeFiles/myproject.dir/src/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myproject.dir/src/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dunkhey/workspace/CXX/V-Toolbox/src/main.cpp > CMakeFiles/myproject.dir/src/main.cpp.i
+CMakeFiles/myproject.dir/samples/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myproject.dir/samples/main.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dunkhey/workspace/CXX/V-Toolbox/samples/main.cpp > CMakeFiles/myproject.dir/samples/main.cpp.i
 
-CMakeFiles/myproject.dir/src/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myproject.dir/src/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dunkhey/workspace/CXX/V-Toolbox/src/main.cpp -o CMakeFiles/myproject.dir/src/main.cpp.s
+CMakeFiles/myproject.dir/samples/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myproject.dir/samples/main.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dunkhey/workspace/CXX/V-Toolbox/samples/main.cpp -o CMakeFiles/myproject.dir/samples/main.cpp.s
+
+CMakeFiles/myproject.dir/src/core/VtInstance.cpp.o: CMakeFiles/myproject.dir/flags.make
+CMakeFiles/myproject.dir/src/core/VtInstance.cpp.o: ../src/core/VtInstance.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/myproject.dir/src/core/VtInstance.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myproject.dir/src/core/VtInstance.cpp.o -c /home/dunkhey/workspace/CXX/V-Toolbox/src/core/VtInstance.cpp
+
+CMakeFiles/myproject.dir/src/core/VtInstance.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myproject.dir/src/core/VtInstance.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dunkhey/workspace/CXX/V-Toolbox/src/core/VtInstance.cpp > CMakeFiles/myproject.dir/src/core/VtInstance.cpp.i
+
+CMakeFiles/myproject.dir/src/core/VtInstance.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myproject.dir/src/core/VtInstance.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dunkhey/workspace/CXX/V-Toolbox/src/core/VtInstance.cpp -o CMakeFiles/myproject.dir/src/core/VtInstance.cpp.s
+
+CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o: CMakeFiles/myproject.dir/flags.make
+CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o: ../src/core/io/VtLogHandler.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o -c /home/dunkhey/workspace/CXX/V-Toolbox/src/core/io/VtLogHandler.cpp
+
+CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dunkhey/workspace/CXX/V-Toolbox/src/core/io/VtLogHandler.cpp > CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.i
+
+CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dunkhey/workspace/CXX/V-Toolbox/src/core/io/VtLogHandler.cpp -o CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.s
 
 # Object files for target myproject
 myproject_OBJECTS = \
-"CMakeFiles/myproject.dir/src/core/instance.cpp.o" \
-"CMakeFiles/myproject.dir/src/main.cpp.o"
+"CMakeFiles/myproject.dir/dependencies/volk.c.o" \
+"CMakeFiles/myproject.dir/samples/main.cpp.o" \
+"CMakeFiles/myproject.dir/src/core/VtInstance.cpp.o" \
+"CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o"
 
 # External object files for target myproject
 myproject_EXTERNAL_OBJECTS =
 
-myproject: CMakeFiles/myproject.dir/src/core/instance.cpp.o
-myproject: CMakeFiles/myproject.dir/src/main.cpp.o
+myproject: CMakeFiles/myproject.dir/dependencies/volk.c.o
+myproject: CMakeFiles/myproject.dir/samples/main.cpp.o
+myproject: CMakeFiles/myproject.dir/src/core/VtInstance.cpp.o
+myproject: CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o
 myproject: CMakeFiles/myproject.dir/build.make
 myproject: CMakeFiles/myproject.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable myproject"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable myproject"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/myproject.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

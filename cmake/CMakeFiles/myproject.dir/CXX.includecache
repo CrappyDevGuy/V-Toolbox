@@ -6,11 +6,19 @@
 
 #IncludeRegexTransform: 
 
-../include/core/instance.hpp
+../include/core/io/VtLogHandler.hpp
+string
+-
+iostream
+-
+iomanip
+-
 
-/home/dunkhey/workspace/CXX/V-Toolbox/src/core/instance.cpp
-core/instance.hpp
-/home/dunkhey/workspace/CXX/V-Toolbox/src/core/core/instance.hpp
-
-/home/dunkhey/workspace/CXX/V-Toolbox/src/main.cpp
+/home/dunkhey/workspace/CXX/V-Toolbox/samples/main.cpp
+core/io/VtLogHandler.hpp
+/home/dunkhey/workspace/CXX/V-Toolbox/samples/core/io/VtLogHandler.hpp
+iostream
+-
+iomanip
+-
 
