@@ -2,7 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/myproject.dir/dependencies/volk.c.o"
   "CMakeFiles/myproject.dir/samples/main.cpp.o"
   "CMakeFiles/myproject.dir/src/core/VtInstance.cpp.o"
-  "CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o"
+  "CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.o"
   "myproject"
   "myproject.pdb"
 )

@@ -223,32 +223,32 @@ src/core/VtInstance.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/VtInstance.cpp.s
 .PHONY : src/core/VtInstance.cpp.s
 
-src/core/io/VtLogHandler.o: src/core/io/VtLogHandler.cpp.o
+src/core/util/VtUtil.o: src/core/util/VtUtil.cpp.o
 
-.PHONY : src/core/io/VtLogHandler.o
+.PHONY : src/core/util/VtUtil.o
 
 # target to build an object file
-src/core/io/VtLogHandler.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o
-.PHONY : src/core/io/VtLogHandler.cpp.o
+src/core/util/VtUtil.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.o
+.PHONY : src/core/util/VtUtil.cpp.o
 
-src/core/io/VtLogHandler.i: src/core/io/VtLogHandler.cpp.i
+src/core/util/VtUtil.i: src/core/util/VtUtil.cpp.i
 
-.PHONY : src/core/io/VtLogHandler.i
+.PHONY : src/core/util/VtUtil.i
 
 # target to preprocess a source file
-src/core/io/VtLogHandler.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.i
-.PHONY : src/core/io/VtLogHandler.cpp.i
+src/core/util/VtUtil.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.i
+.PHONY : src/core/util/VtUtil.cpp.i
 
-src/core/io/VtLogHandler.s: src/core/io/VtLogHandler.cpp.s
+src/core/util/VtUtil.s: src/core/util/VtUtil.cpp.s
 
-.PHONY : src/core/io/VtLogHandler.s
+.PHONY : src/core/util/VtUtil.s
 
 # target to generate assembly for a file
-src/core/io/VtLogHandler.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.s
-.PHONY : src/core/io/VtLogHandler.cpp.s
+src/core/util/VtUtil.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/myproject.dir/build.make CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.s
+.PHONY : src/core/util/VtUtil.cpp.s
 
 # Help Target
 help:
@@ -268,9 +268,9 @@ help:
 	@echo "... src/core/VtInstance.o"
 	@echo "... src/core/VtInstance.i"
 	@echo "... src/core/VtInstance.s"
-	@echo "... src/core/io/VtLogHandler.o"
-	@echo "... src/core/io/VtLogHandler.i"
-	@echo "... src/core/io/VtLogHandler.s"
+	@echo "... src/core/util/VtUtil.o"
+	@echo "... src/core/util/VtUtil.i"
+	@echo "... src/core/util/VtUtil.s"
 .PHONY : help
 
 

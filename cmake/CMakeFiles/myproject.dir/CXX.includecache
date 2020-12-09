@@ -6,6 +6,26 @@
 
 #IncludeRegexTransform: 
 
+../dependencies/volk.h
+vulkan/vk_platform.h
+-
+vulkan/vulkan_core.h
+-
+vulkan/vulkan_win32.h
+-
+vulkan/vulkan.h
+-
+
+../include/core/VtInstance.hpp
+volk.h
+../include/core/volk.h
+io/VtLogHandler.hpp
+../include/core/io/VtLogHandler.hpp
+utility
+-
+vector
+-
+
 ../include/core/io/VtLogHandler.hpp
 string
 -
@@ -13,10 +33,14 @@ iostream
 -
 iomanip
 -
+chrono
+-
 
 /home/dunkhey/workspace/CXX/V-Toolbox/samples/main.cpp
 core/io/VtLogHandler.hpp
 /home/dunkhey/workspace/CXX/V-Toolbox/samples/core/io/VtLogHandler.hpp
+core/VtInstance.hpp
+/home/dunkhey/workspace/CXX/V-Toolbox/samples/core/VtInstance.hpp
 iostream
 -
 iomanip

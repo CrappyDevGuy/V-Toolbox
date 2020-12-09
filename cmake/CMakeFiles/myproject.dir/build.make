@@ -115,25 +115,25 @@ CMakeFiles/myproject.dir/src/core/VtInstance.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myproject.dir/src/core/VtInstance.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dunkhey/workspace/CXX/V-Toolbox/src/core/VtInstance.cpp -o CMakeFiles/myproject.dir/src/core/VtInstance.cpp.s
 
-CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o: CMakeFiles/myproject.dir/flags.make
-CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o: ../src/core/io/VtLogHandler.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o -c /home/dunkhey/workspace/CXX/V-Toolbox/src/core/io/VtLogHandler.cpp
+CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.o: CMakeFiles/myproject.dir/flags.make
+CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.o: ../src/core/util/VtUtil.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.o -c /home/dunkhey/workspace/CXX/V-Toolbox/src/core/util/VtUtil.cpp
 
-CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dunkhey/workspace/CXX/V-Toolbox/src/core/io/VtLogHandler.cpp > CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.i
+CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/dunkhey/workspace/CXX/V-Toolbox/src/core/util/VtUtil.cpp > CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.i
 
-CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dunkhey/workspace/CXX/V-Toolbox/src/core/io/VtLogHandler.cpp -o CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.s
+CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/dunkhey/workspace/CXX/V-Toolbox/src/core/util/VtUtil.cpp -o CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.s
 
 # Object files for target myproject
 myproject_OBJECTS = \
 "CMakeFiles/myproject.dir/dependencies/volk.c.o" \
 "CMakeFiles/myproject.dir/samples/main.cpp.o" \
 "CMakeFiles/myproject.dir/src/core/VtInstance.cpp.o" \
-"CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o"
+"CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.o"
 
 # External object files for target myproject
 myproject_EXTERNAL_OBJECTS =
@@ -141,8 +141,9 @@ myproject_EXTERNAL_OBJECTS =
 myproject: CMakeFiles/myproject.dir/dependencies/volk.c.o
 myproject: CMakeFiles/myproject.dir/samples/main.cpp.o
 myproject: CMakeFiles/myproject.dir/src/core/VtInstance.cpp.o
-myproject: CMakeFiles/myproject.dir/src/core/io/VtLogHandler.cpp.o
+myproject: CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.o
 myproject: CMakeFiles/myproject.dir/build.make
+myproject: /usr/lib/libglfw.so.3
 myproject: CMakeFiles/myproject.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable myproject"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/myproject.dir/link.txt --verbose=$(VERBOSE)

@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <chrono>
 
 namespace VtLogHandler
 {
@@ -12,9 +13,9 @@ namespace VtLogHandler
 	constexpr static std::uint8_t max_nspace = 15;
 
 	#ifndef VT_DEBUG_DEFINE
-		inline void oStreamDebug(std::string projectnspace, std::string src, std::string msg) const {}
+		inline void oStreamDebug(std::string projectnspace, std::string src, std::string msg) {}
 	#else
-	  inline void oStreamDebug(std::string s, std::string src, std::string msg)
+	  inline void oStreamDebug(std::string s, std::string src, std::string msg) noexcept
 	  {
 	  	std::string a{"[" + s + "]"};
 	   	std::string b{"[" + src + "]"};
@@ -22,21 +23,21 @@ namespace VtLogHandler
 	  }
 	#endif
 
-  inline void oStream(std::string s, std::string src, std::string msg)
+  inline void oStream(std::string s, std::string src, std::string msg) noexcept
   {
   	std::string a{"[" + s + "]"};
    	std::string b{"[" + src + "]"};
    	std::cout << "\033[37;1m[INFO]\033[0m" << std::setw((max_label-17)+a.size()) << a << std::setw((max_nspace-a.size())+b.size()) << b << " : " << msg << '\n'; 
   }
 
-	inline void oStreamError(std::string s, std::string src, std::string msg)
+	inline void oStreamError(std::string s, std::string src, std::string msg) noexcept
   {
   	std::string a{"[" + s + "]"};
    	std::string b{"[" + src + "]"};
    	std::cout << "\033[31;1m[ERROR]\033[0m" << std::setw((max_label-18)+a.size()) << a << std::setw((max_nspace-a.size())+b.size()) << b << " : " << msg << '\n'; 
   }
   
-  inline void oStreamWarning(std::string s, std::string src, std::string msg)
+  inline void oStreamWarning(std::string s, std::string src, std::string msg) noexcept
   {
     std::string a{"[" + s + "]"};
     std::string b{"[" + src + "]"};
@@ -48,6 +49,7 @@ namespace VtLogHandler
   	std::string a{"[" + s + "]"};
    	std::string b{"[" + src + "]"};
    	std::cout << "\033[37;41m[FATAL_ERROR]\033[0m" << std::setw((max_label-24)+a.size()) << a << std::setw((max_nspace-a.size())+b.size()) << b << " : " << msg << '\n'; 
+   	throw std::runtime_error(msg);
   }
 
 	
