@@ -13,12 +13,6 @@
 int main()
 {
 
-	// VtLogHandler::oStreamDebug("myproject", "TEST123", "ABC");
-	// VtLogHandler::oStream("myproject", "TEST123", "ABC");
-	// VtLogHandler::oStreamError("myproject", "TEST123", "ABC");
-	// VtLogHandler::oStreamWarning("myproject", "TEST123", "ABC");
-	// VtLogHandler::oStreamFatalError("myproject", "TEST123", "ABC");
-
 	VtInstanceCreateInfo instanceCreateInfo{};
 	instanceCreateInfo.appName    = "MainInstance";
 	instanceCreateInfo.appVersion = VK_MAKE_VERSION(0,0,1);
