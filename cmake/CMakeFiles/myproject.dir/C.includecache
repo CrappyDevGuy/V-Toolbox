@@ -6,3 +6,19 @@
 
 #IncludeRegexTransform: 
 
+/home/dunkhey/Bureau/V-Toolbox/dependencies/volk.c
+volk.h
+/home/dunkhey/Bureau/V-Toolbox/dependencies/volk.h
+dlfcn.h
+-
+
+/home/dunkhey/Bureau/V-Toolbox/dependencies/volk.h
+vulkan/vk_platform.h
+-
+vulkan/vulkan_core.h
+-
+vulkan/vulkan_win32.h
+-
+vulkan/vulkan.h
+-
+

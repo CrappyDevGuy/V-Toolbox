@@ -5,13 +5,13 @@
 # compile CXX with /usr/bin/c++
 C_DEFINES = -DVULKAN_NO_PROTOTYPES
 
-C_INCLUDES = -I/home/dunkhey/workspace/CXX/V-Toolbox/src -I/home/dunkhey/workspace/CXX/V-Toolbox/include -I/home/dunkhey/workspace/CXX/V-Toolbox/dependencies -I/home/dunkhey/workspace/CXX/V-Toolbox/samples
+C_INCLUDES = -I/home/dunkhey/Bureau/V-Toolbox/src -I/home/dunkhey/Bureau/V-Toolbox/include -I/home/dunkhey/Bureau/V-Toolbox/dependencies -I/home/dunkhey/Bureau/V-Toolbox/samples
 
 C_FLAGS = 
 
 CXX_DEFINES = -DVULKAN_NO_PROTOTYPES
 
-CXX_INCLUDES = -I/home/dunkhey/workspace/CXX/V-Toolbox/src -I/home/dunkhey/workspace/CXX/V-Toolbox/include -I/home/dunkhey/workspace/CXX/V-Toolbox/dependencies -I/home/dunkhey/workspace/CXX/V-Toolbox/samples
+CXX_INCLUDES = -I/home/dunkhey/Bureau/V-Toolbox/src -I/home/dunkhey/Bureau/V-Toolbox/include -I/home/dunkhey/Bureau/V-Toolbox/dependencies -I/home/dunkhey/Bureau/V-Toolbox/samples
 
 CXX_FLAGS = -std=gnu++17
 

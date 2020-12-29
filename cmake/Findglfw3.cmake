@@ -84,7 +84,7 @@ endif()
 
 mark_as_advanced( GLFW_LIBRARY_DIR )
 mark_as_advanced( GLFW_LIBRARY )
-find_package_handle_standard_args( glfw3 DEFAULT_MSG GLFW_LIBRARY GLFW_INCLUDE_DIR )
+find_package_handle_standard_args( GLFW DEFAULT_MSG GLFW_LIBRARY GLFW_INCLUDE_DIR )
 
 if ( GLFW_FOUND )
 	set( GLFW_LIBRARIES ${GLFW_LIBRARY} CACHE STRING "GLFW libraries" )
