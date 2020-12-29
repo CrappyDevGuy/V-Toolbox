@@ -3,9 +3,9 @@
 #pragma once
 
 #include "volk.h"
-#include "io/VtLogHandler.hpp"
 #include <utility>
 #include <vector>
+#include <string>
 
 static const std::vector<const char*> VtValidationLayers = { "VK_LAYER_KHRONOS_validation" };
 static const std::vector<const char*> VtDeviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
@@ -13,8 +13,8 @@ static const std::vector<const char*> VtDeviceExtensions = { VK_KHR_SWAPCHAIN_EX
   
 struct VtInstanceCreateInfo
 {
-	std::string   appName       = "Undefined";
-	std::uint32_t appVersion    = VK_MAKE_VERSION(1,0,0);
+	std::string   appName{"NULL"};
+	std::uint32_t appVersion{VK_MAKE_VERSION(1,0,0)};
 };
 
 class VtInstance
@@ -34,12 +34,14 @@ class VtInstance
 		auto& getVkCallback() 		 const { return m_callback; };
 		std::string_view getName() const { return m_name;     };
 
+    std::vector<VkPhysicalDevice> enumeratePhysicalDevices();
+
 	private:
 		bool 									   checkValidationLayerSupport();
 		std::vector<const char*> getRequiredExtensions(bool validationLayers);
 
 	private:
-		VkInstance  						 m_instance = nullptr;
-		VkDebugUtilsMessengerEXT m_callback = nullptr;
-		std::string 						 m_name     = "Undefined";
+		VkInstance  						 m_instance{nullptr};
+		VkDebugUtilsMessengerEXT m_callback{nullptr};
+		std::string 						 m_name{"NULL"};
 };

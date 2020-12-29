@@ -23,7 +23,12 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
   )
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/dunkhey/workspace/CXX/V-Toolbox/samples/main.cpp" "/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles/myproject.dir/samples/main.cpp.o"
+  "/home/dunkhey/workspace/CXX/V-Toolbox/src/core/VtDevices.cpp" "/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles/myproject.dir/src/core/VtDevices.cpp.o"
   "/home/dunkhey/workspace/CXX/V-Toolbox/src/core/VtInstance.cpp" "/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles/myproject.dir/src/core/VtInstance.cpp.o"
+  "/home/dunkhey/workspace/CXX/V-Toolbox/src/core/VtSwapchain.cpp" "/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles/myproject.dir/src/core/VtSwapchain.cpp.o"
+  "/home/dunkhey/workspace/CXX/V-Toolbox/src/core/VtWindow.cpp" "/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles/myproject.dir/src/core/VtWindow.cpp.o"
+  "/home/dunkhey/workspace/CXX/V-Toolbox/src/core/graphics/VtBuffer.cpp" "/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles/myproject.dir/src/core/graphics/VtBuffer.cpp.o"
+  "/home/dunkhey/workspace/CXX/V-Toolbox/src/core/graphics/VtImage.cpp" "/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles/myproject.dir/src/core/graphics/VtImage.cpp.o"
   "/home/dunkhey/workspace/CXX/V-Toolbox/src/core/util/VtUtil.cpp" "/home/dunkhey/workspace/CXX/V-Toolbox/cmake/CMakeFiles/myproject.dir/src/core/util/VtUtil.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

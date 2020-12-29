@@ -3,6 +3,7 @@
 #include "core/VtInstance.hpp"
 
 #include "core/util/VtUtil.hpp"
+#include "core/io/VtLogHandler.hpp"
 
 #include <GLFW/glfw3.h>
 #include <cstring>
@@ -16,7 +17,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
   const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
   void* pUserData);
 
-//_ Public Functions _// 
+//_ Public Functions _//
 VtInstance& VtInstance::operator=(VtInstance&& other) noexcept
 {
 	std::swap(m_instance, other.m_instance);
@@ -33,7 +34,7 @@ VtInstance::VtInstance(VtInstance&& other) noexcept
 
 VtInstance::VtInstance(VtInstanceCreateInfo _createInfo)
 {
-	m_name = std::move(_createInfo.appName);	
+	m_name = std::move(_createInfo.appName);
 
 	VtUtil::checkVulkanResult(m_name+"_volk", volkInitialize());
 	VtLogHandler::oStream("V-Toolbox", m_name+"::VtInstance", "Volk has been initialize");
@@ -68,7 +69,7 @@ VtInstance::VtInstance(VtInstanceCreateInfo _createInfo)
 
   volkLoadInstance(m_instance);
 
-  VtUtil::checkVulkanResult(m_name+"_DebugMessenger", CreateDebugUtilsMessengerEXT(m_instance, &debugMessengerCreateInfo, nullptr, &m_callback));
+  VtUtil::checkVulkanResult(m_name+"::VtInstance::DebugMessenger", CreateDebugUtilsMessengerEXT(m_instance, &debugMessengerCreateInfo, nullptr, &m_callback));
   VtLogHandler::oStream("V-toolbox", m_name+"::VtInstance", "Success to create");
 }
 
@@ -78,15 +79,37 @@ VtInstance::~VtInstance()
 	{
 		DestroyDebugUtilsMessengerEXT(m_instance, m_callback, nullptr);
 		m_callback = nullptr;
-		VtLogHandler::oStream("V-Toolbox", m_name+"::~VtInstance", "destroying Debug Messenger");
+		VtLogHandler::oStreamDebug("V-Toolbox", m_name+"::~VtInstance", "Succes to Destroy VkDebugUtilsMessengerEXT");
 	}
 
 	if(m_instance != nullptr)
 	{
     vkDestroyInstance(m_instance, nullptr);
 		m_instance = nullptr;
-		VtLogHandler::oStream("V-Toolbox", m_name+"::~VtInstance", "destroying Instance");
+		VtLogHandler::oStream("V-Toolbox", m_name+"::~VtInstance", "Success to destroy VkInstance");
 	}
+}
+
+std::vector<VkPhysicalDevice> VtInstance::enumeratePhysicalDevices()
+{
+	std::uint32_t deviceCount = 0;
+  vkEnumeratePhysicalDevices(m_instance, &deviceCount, nullptr);
+
+  if(deviceCount == 0)
+  	VtLogHandler::oStreamFatalError("V-Toolbox", m_name+"::VtInstance::enumeratePhysicalDevices", "no graphics card support Vulkan");
+
+	std::vector<VkPhysicalDevice> devices(deviceCount);
+  vkEnumeratePhysicalDevices(m_instance, &deviceCount, devices.data());
+
+	#ifdef VT_DEBUG_DEFINE
+	  VkPhysicalDeviceProperties deviceproperties;
+	  for(auto a_device : devices)
+	  {
+	    vkGetPhysicalDeviceProperties(a_device, &deviceproperties);
+	    VtLogHandler::oStreamDebug("V-Toolbox", m_name+"::VtInstance::enumeratePhysicalDevices", "found GPU : " + std::string(deviceproperties.deviceName));
+	  }
+  #endif
+  return devices;
 }
 
 //_ Private Functions _//
@@ -140,11 +163,11 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 {
 
   if(messageSeverity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
-    VtLogHandler::oStreamWarning("V-Toolbox", "[instance::debugCallback]", std::string(pCallbackData->pMessage));
+    VtLogHandler::oStreamWarning("V-Toolbox", "Vulkan::debugCallback", std::string(pCallbackData->pMessage));
   }else if(messageSeverity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
-    VtLogHandler::oStreamFatalError("V-Toolbox", "[instance::debugCallback]", std::string(pCallbackData->pMessage));
-  else
-    VtLogHandler::oStreamDebug("V-Toolbox", "[instance::debugCallback]", std::string(pCallbackData->pMessage));
+    VtLogHandler::oStreamFatalError("V-Toolbox", "Vulkan::debugCallback", std::string(pCallbackData->pMessage));
+  else if(messageSeverity != VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT)
+    VtLogHandler::oStreamDebug("V-Toolbox", "Vulkan::debugCallback", std::string(pCallbackData->pMessage));
 
   return VK_FALSE;
 }

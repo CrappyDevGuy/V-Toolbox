@@ -3,7 +3,33 @@
 #include "core/io/VtLogHandler.hpp"
 #include "core/util/VtUtil.hpp"
 
+#include <fstream>
+#include <sstream>
 
+std::string VtUtil::VkQueueFlagsToString(VkQueueFlags flags)
+{
+    std::string strflags = "";
+    if(flags & VK_QUEUE_GRAPHICS_BIT)       strflags += "Graphics ";
+    if(flags & VK_QUEUE_COMPUTE_BIT)        strflags += "Compute ";
+    if(flags & VK_QUEUE_TRANSFER_BIT)       strflags += "Transfer ";
+    if(flags & VK_QUEUE_SPARSE_BINDING_BIT) strflags += "SparseBinding ";
+    if(flags & VK_QUEUE_PROTECTED_BIT)      strflags += "Protected ";
+    return strflags;
+}
+
+std::string VtUtil::VkSamplesFlagToString(VkSampleCountFlagBits flag)
+{
+    std::string strflag = "";
+        if(flag & VK_SAMPLE_COUNT_64_BIT) strflag += "VK_SAMPLE_COUNT_64_BIT";
+    else if(flag & VK_SAMPLE_COUNT_32_BIT) strflag += "VK_SAMPLE_COUNT_32_BIT";
+    else if(flag & VK_SAMPLE_COUNT_16_BIT) strflag += "VK_SAMPLE_COUNT_16_BIT";
+    else if(flag & VK_SAMPLE_COUNT_8_BIT)  strflag += "VK_SAMPLE_COUNT_8_BIT";
+    else if(flag & VK_SAMPLE_COUNT_4_BIT)  strflag += "VK_SAMPLE_COUNT_4_BIT";
+    else if(flag & VK_SAMPLE_COUNT_2_BIT)  strflag += "VK_SAMPLE_COUNT_2_BIT";
+    else if(flag & VK_SAMPLE_COUNT_1_BIT)  strflag += "VK_SAMPLE_COUNT_1_BIT";
+    return strflag;
+}
+    
 bool VtUtil::checkVulkanResult(std::string name, VkResult result)
 {
 
@@ -117,4 +143,34 @@ bool VtUtil::checkVulkanResult(std::string name, VkResult result)
 
   return true;   
 
+}
+
+namespace dcafs = std::filesystem;
+void VtUtil::file::load(const std::string& filepath, std::vector<char>& datas)
+{
+  std::ifstream file(filepath, std::ios::ate | std::ios::binary);
+
+  if(!file.is_open())
+  	VtLogHandler::oStreamFatalError("V-Toolbox", "VtUtil::file::load", "Failed to open : " + filepath);
+
+  std::size_t fileSize = (size_t) file.tellg();
+  datas.resize(fileSize);
+
+  file.seekg(0);
+  file.read(datas.data(), fileSize);
+
+  file.close();
+  VtLogHandler::oStream("V-Toolbox", "VtUtil::file::load", "Success to load : " + filepath);
+}
+
+void VtUtil::file::getFiles(std::string& directory, std::set<std::string>& files)
+{
+  for(const auto& entry : dcafs::directory_iterator(directory))
+    files.insert(entry.path().c_str());
+}
+
+void VtUtil::file::getFiles(std::string& directory, std::vector<std::string>& files)
+{
+  for(const auto& entry : dcafs::directory_iterator(directory))
+    files.push_back(entry.path().c_str());
 }
