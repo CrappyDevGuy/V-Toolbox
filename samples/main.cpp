@@ -6,6 +6,8 @@
 #include "core/VtWindow.hpp"
 #include "core/VtDevices.hpp"
 #include "core/VtSwapchain.hpp"
+#include "core/graphics/pool/VtCommandPool.hpp"
+#include "core/graphics/pool/VtDescriptorPool.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -51,6 +53,24 @@ int main()
 
 	VtSwapchain swapchain{swapchainCreateInfo};
 
+	VtCommandPoolCreateInfo commandPoolCreateInfo{};
+	commandPoolCreateInfo.name  					 = "MainCommandPool";
+	commandPoolCreateInfo.flags 					 = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+	commandPoolCreateInfo.queueFamilyIndex = devices.getQueueIndex(0);
+	commandPoolCreateInfo.pVtDevices			 = &devices;
+
+	VtCommandPool commandPool{commandPoolCreateInfo};
+
+	VtDescriptorPoolCreateInfo descriptorPoolCreateInfo{};
+	descriptorPoolCreateInfo.name       = "MainDescriptorPool";
+	descriptorPoolCreateInfo.setsCount  = 1;
+	descriptorPoolCreateInfo.pVtDevices = &devices;
+	descriptorPoolCreateInfo.poolsData  = {
+		{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1}
+	};
+
+	VtDescriptorPool descriptorPool{descriptorPoolCreateInfo};
+	
   VtLogHandler::oStream("myproject", "main", "Starting");
 
 	while(!window.shouldClose())

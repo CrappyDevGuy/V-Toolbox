@@ -67,7 +67,7 @@ VtWindow::VtWindow(VtWindowCreateInfo _createInfo)
 	
 	glfwSetFramebufferSizeCallback(m_window, framebufferSizeCallback);
 	
-	VtUtil::checkVulkanResult(m_data.name+"_surface", glfwCreateWindowSurface(m_pVtInstance->getVkInstance(), m_window, nullptr, &m_surface));
+	VtUtil::checkVulkanResult(m_data.name+"::VtWindow::glfwCreateWindowSurface", glfwCreateWindowSurface(m_pVtInstance->getVkInstance(), m_window, nullptr, &m_surface));
 	VtLogHandler::oStream("V-Toolbox", m_data.name+"::VtWindow", "Success to create");
 }
 

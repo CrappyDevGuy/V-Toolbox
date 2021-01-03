@@ -13,7 +13,9 @@ namespace VtUtil
 
 	bool checkVulkanResult(std::string name, VkResult result);
 	std::string VkQueueFlagsToString(VkQueueFlags flags);
-	std::string VkSamplesFlagToString(VkSampleCountFlagBits flag);
+	std::string VkSampleFlagsToString(VkSampleCountFlagBits flag);
+	std::string VkCommandPoolFlagsToString(VkCommandPoolCreateFlags flag);
+	std::string VkDescriptorTypeFlagToString(VkDescriptorType flag);
 
   namespace file
   {
