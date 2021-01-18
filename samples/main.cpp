@@ -8,6 +8,8 @@
 #include "core/VtSwapchain.hpp"
 #include "core/graphics/pool/VtCommandPool.hpp"
 #include "core/graphics/pool/VtDescriptorPool.hpp"
+#include "core/graphics/VtCommandBuffer.hpp"
+#include "core/graphics/VtShader.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -60,6 +62,19 @@ int main()
 	commandPoolCreateInfo.pVtDevices			 = &devices;
 
 	VtCommandPool commandPool{commandPoolCreateInfo};
+
+	std::vector<VtCommandBuffer> commandBuffers(3);
+
+	VtCommandBufferCreateInfo commandBufferCreateInfo{};
+  commandBufferCreateInfo.pVtDevices = &devices;
+
+	for(auto i = 0u; i < commandBuffers.size(); i++)
+	{
+		commandBufferCreateInfo.name  = "CommandBuffer[" + std::to_string(i) + "]";
+
+		commandBuffers[i] = {commandBufferCreateInfo};
+		commandBuffers[i].alloc(&commandPool);
+	}
 
 	VtDescriptorPoolCreateInfo descriptorPoolCreateInfo{};
 	descriptorPoolCreateInfo.name       = "MainDescriptorPool";

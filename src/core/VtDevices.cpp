@@ -17,8 +17,8 @@ VtDevices& VtDevices::operator=(VtDevices&& other) noexcept
 
 VtDevices::VtDevices(VtDevices&& other) noexcept
 :m_data{std::move(other.m_data)}
-,m_logicalDevice(std::exchange(other.m_logicalDevice, nullptr))
-,m_physicalDevice(std::exchange(other.m_physicalDevice, nullptr))
+,m_logicalDevice{std::exchange(other.m_logicalDevice, nullptr)}
+,m_physicalDevice{std::exchange(other.m_physicalDevice, nullptr)}
 {}
 
 VtDevices::VtDevices(VtDevicesCreateInfo _createInfo)
