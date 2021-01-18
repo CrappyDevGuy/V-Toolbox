@@ -41,9 +41,17 @@ class VtSwapchain
 		VtSwapchain& operator=(const VtSwapchain&) = delete;
 		VtSwapchain& operator=(VtSwapchain&& other) noexcept;
 		VtSwapchain(VtSwapchain&& other) noexcept;
-		
 
 		VkResult acquireImage(VkSemaphore& t_semaphore, std::uint32_t& imageIndex);
+
+
+		inline auto& getImageFormat() const noexcept { return m_data.imageFormat; 			};
+		inline auto& getDepthFormat() const noexcept { return m_data.depthFormat; 			};
+		inline auto  getImageCount()  const noexcept { return m_data.imagesView.size(); };
+
+		inline auto& getColorImage()  					 noexcept { return m_data.colorImage; 	 								};
+		inline auto& getDepthImage()  					 noexcept { return m_data.depthImage; 	 								};
+		inline auto& getImageView(std::size_t i) noexcept { return m_data.imagesView[i].getImageView(); };
 
 	private:
     VkSurfaceFormatKHR chooseSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availables);

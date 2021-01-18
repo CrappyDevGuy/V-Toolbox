@@ -192,7 +192,7 @@ void VtUtil::file::load(const std::string& filepath, std::vector<char>& datas)
   file.read(datas.data(), fileSize);
 
   file.close();
-  VtLogHandler::oStream("V-Toolbox", "VtUtil::file::load", "Success to load : " + filepath);
+  VtLogHandler::oStreamDebug("V-Toolbox", "VtUtil::file::load", "Success to load : " + filepath);
 }
 
 void VtUtil::file::getFiles(std::string& directory, std::set<std::string>& files)

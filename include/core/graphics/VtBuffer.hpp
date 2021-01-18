@@ -49,6 +49,8 @@ class VtBuffer
     void createView(VkFormat format, VkDeviceSize offset, VkDeviceSize range);
     void copyToImage(VkCommandBuffer& commandBuffer, VtImage& rImage);
 
+    inline auto getDescriptorSetInfo() noexcept { return VkDescriptorBufferInfo{m_buffer, 0, m_size}; };
+
 	private:
     std::string   m_name;
     VkDeviceSize  m_size{0};

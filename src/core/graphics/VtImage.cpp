@@ -35,7 +35,7 @@ VtImage::VtImage(VtImageCreateInfo _createInfo)
 	m_data.name   = std::move(_createInfo.name);
 	m_data.format = std::move(_createInfo.format);
 
-	VtLogHandler::oStream("V-Toolbox", m_data.name+"::VtImage", "Success to create");
+	VtLogHandler::oStreamDebug("V-Toolbox", m_data.name+"::VtImage", "Success to create");
 }
 
 VtImage::~VtImage()
@@ -44,7 +44,7 @@ VtImage::~VtImage()
 	{
 		vkDestroyImage(m_pVtDevices->getLogicalDevice(), m_image, nullptr);
 		m_image = nullptr;
-		VtLogHandler::oStream("V-Toolbox", m_data.name+"::~VtImage", "Success to destroy VkImage");
+		VtLogHandler::oStreamDebug("V-Toolbox", m_data.name+"::~VtImage", "Success to destroy VkImage");
 	}
 
 	if(m_imageView != nullptr)

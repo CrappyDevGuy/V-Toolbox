@@ -51,7 +51,7 @@ VtBuffer::VtBuffer(VtBufferCreateInfo _createInfo)
   VtUtil::checkVulkanResult(m_name+"::VtBuffer::Allocation", vkAllocateMemory(m_pVtDevices->getLogicalDevice(), &allocInfo, nullptr, &m_memory));
   VtUtil::checkVulkanResult(m_name+"::VtBuffer::Binding", vkBindBufferMemory(m_pVtDevices->getLogicalDevice(), m_buffer, m_memory, 0));
 
-	VtLogHandler::oStream("V-Toolbox", m_name+"::VtBuffer", "Success to create");	
+	VtLogHandler::oStreamDebug("V-Toolbox", m_name+"::VtBuffer", "Success to create");	
 }
 
 VtBuffer::~VtBuffer()

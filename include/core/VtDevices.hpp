@@ -87,7 +87,7 @@ class VtDevices
 
 		inline auto& getLogicalDevice()  const noexcept { return m_logicalDevice;				   };
 		inline auto& getPhysicalDevice() const noexcept { return m_physicalDevice; 				 };
-    inline auto  getMSAACount()      const noexcept { return m_data.msaaSamples; };
+    inline auto  getSamplesCount()   const noexcept { return m_data.msaaSamples; };
 		
     std::uint32_t findMemoryType(std::uint32_t typeFilter, VkMemoryPropertyFlags properties, std::string debugname);
 		VkFormat      getSupportedFormat(std::vector<VkFormat> candidates, VkImageTiling tiling, VkFormatFeatureFlags features, std::string debugname = "NULL");

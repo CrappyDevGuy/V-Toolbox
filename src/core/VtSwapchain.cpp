@@ -108,7 +108,7 @@ VtSwapchain::~VtSwapchain()
 	{
     vkDestroySwapchainKHR(m_pVtDevices->getLogicalDevice(), m_swapchain, nullptr);
 		m_swapchain = nullptr;
-		VtLogHandler::oStream("V-Toolbox", m_data.name+"::~VtSwapchain", "Success to destroy");
+		VtLogHandler::oStream("V-Toolbox", m_data.name+"::~VtSwapchain", "Success to destroy VkSwapchainKHR");
 	}
 }
 
@@ -148,7 +148,7 @@ void VtSwapchain::createImages()
   depth_imageInfo.tiling        = VK_IMAGE_TILING_OPTIMAL;
   depth_imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
   depth_imageInfo.usage         = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
-  depth_imageInfo.samplesCount  = m_pVtDevices->getMSAACount();
+  depth_imageInfo.samplesCount  = m_pVtDevices->getSamplesCount();
 
   m_data.depthImage = {depth_createInfo};
   m_data.depthImage.createImage(std::move(depth_imageInfo));
@@ -166,7 +166,7 @@ void VtSwapchain::createImages()
   color_imageInfo.tiling        = VK_IMAGE_TILING_OPTIMAL;
   color_imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
   color_imageInfo.usage         = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-  color_imageInfo.samplesCount  = m_pVtDevices->getMSAACount();
+  color_imageInfo.samplesCount  = m_pVtDevices->getSamplesCount();
 
   m_data.colorImage = {std::move(color_createInfo)};
   m_data.colorImage.createImage(std::move(color_imageInfo));
