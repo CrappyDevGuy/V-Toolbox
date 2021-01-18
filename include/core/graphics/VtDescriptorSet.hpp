@@ -1,5 +1,7 @@
 //_Author : CrappyDevGuy, M01D18Y2021_//
 
+#pragma once
+
 #include "core/VtDevices.hpp"
 #include "core/graphics/pool/VtDescriptorPool.hpp"
 #include "core/graphics/layout/VtDescriptorLayout.hpp"
@@ -45,7 +47,7 @@ class VtDescriptorSet
     void build(VtDescriptorPool* pVtDescriptorPool, VtDescriptorLayout* pVtDescriptorLayout);
     void update();
 
-    inline auto& getInstance() const noexcept { return m_descriptor; };
+    inline auto& getInstance() noexcept { return m_descriptor; };
 
 	private:
 		std::string 		m_name{"NULL"};

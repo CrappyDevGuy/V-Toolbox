@@ -26,7 +26,6 @@ class VtWindow
 		bool 				resize;
 
 		glm::ivec2 mousePosition;
-
 	};
 
 	public:

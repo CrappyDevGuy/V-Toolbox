@@ -4,6 +4,7 @@
 
 #include "core/VtDevices.hpp"
 #include "core/graphics/pool/VtCommandPool.hpp"
+#include "core/graphics/VtPipeline.hpp"
 
 struct VtCommandBufferCreateInfo
 {
@@ -35,7 +36,7 @@ class VtCommandBuffer
 		void end();
 		void reset();
 
-		void bindPipeline();
+		void bindPipeline(VtPipeline* pVtPipeline);
 
 		void beginRenderPass(VkRenderPassBeginInfo info, VkSubpassContents contents);
 		void endRenderPass();
@@ -51,6 +52,9 @@ class VtCommandBuffer
 
 		void drawIndexed(std::uint32_t indicesCount, std::uint32_t instanceCount);
 		void nextSubpass(VkSubpassContents contents);
+
+    void copyBuffer(VkBuffer& srcBuffer, VkBuffer& dstBuffer, VkDeviceSize size);
+    void copyBuffers(std::vector<VkBuffer> srcBuffers, std::vector<VkBuffer> dstBuffers, std::vector<VkDeviceSize> sizes);
 		
 	private:
 		std::string 				m_name{"NULL"};

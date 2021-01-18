@@ -28,6 +28,8 @@ class VtFramebuffer
 		VtFramebuffer& operator=(VtFramebuffer&& other) noexcept;
 		VtFramebuffer(VtFramebuffer&& other) noexcept;
 
+		inline auto& getInstance() const noexcept { return m_framebuffer; };
+
 	private:
 		std::string   m_name{"NULL"};
 		VtDevices*    m_pVtDevices{nullptr};

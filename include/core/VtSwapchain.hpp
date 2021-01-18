@@ -53,6 +53,9 @@ class VtSwapchain
 		inline auto& getDepthImage()  					 noexcept { return m_data.depthImage; 	 								};
 		inline auto& getImageView(std::size_t i) noexcept { return m_data.imagesView[i].getImageView(); };
 
+
+		inline auto& getInstance() const noexcept { return m_swapchain; };
+
 	private:
     VkSurfaceFormatKHR chooseSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availables);
     VkPresentModeKHR   choosePresentMode(const std::vector<VkPresentModeKHR>& availables, VkPresentModeKHR present);

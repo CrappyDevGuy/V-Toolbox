@@ -18,6 +18,12 @@ if(GLFW_FOUND)
   message(STATUS "Include GLFW Library Path : " ${GLFW_INCLUDE_DIRS})
 endif()
 
+find_package(assimp REQUIRED)
+if(ASSIMP_FOUND)
+	include_directories(${ASSIMP_INCLUDE_DIR})
+  message(STATUS "Include Assimp Library Path : " ${ASSIMP_INCLUDE_DIRS})
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -26,4 +32,5 @@ add_executable(myproject ${SRCS} ${HEADERS} dependencies/volk.h)
 target_compile_definitions(myproject PRIVATE VULKAN_NO_PROTOTYPES)
 
 target_link_libraries(myproject ${GLFW_LIBRARIES})
+target_link_libraries(myproject ${ASSIMP_LIBRARIES})
 target_link_libraries(myproject ${CMAKE_DL_LIBS})

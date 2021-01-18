@@ -27,7 +27,7 @@ class VtPipelineLayout
 
     void addDescriptorLayout(VtDescriptorLayout* pDescriptorLayout);
     
-    inline auto& getInstance() const noexcept { return m_pipelineLayout; };
+    inline auto& getInstance() noexcept { return m_pipelineLayout; };
 
 	private:
 		std::string      m_name{"NULL"};

@@ -66,18 +66,22 @@ void VtPipeline::build(VtShader* pVtShader, VtRenderpass* pVtRenderpass, VtPipel
 	  inAsmCreateInfo.sType                  = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 	  inAsmCreateInfo.topology               = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 	  inAsmCreateInfo.primitiveRestartEnable = VK_FALSE;
+
+		VkExtent2D extent;
+		extent.width  = static_cast<std::uint32_t>(m_parameters.viewport.x);
+		extent.height = static_cast<std::uint32_t>(m_parameters.viewport.y);
 	
 	  VkViewport viewport = {};
 	  viewport.x        = 0.0f;
 	  viewport.y        = 0.0f;
-	  viewport.width    = m_parameters.viewport.width;
-	  viewport.height   = m_parameters.viewport.height;
+	  viewport.width    = extent.width;
+	  viewport.height   = extent.height;
 	  viewport.minDepth = 0.0f;
 	  viewport.maxDepth = 1.0f;
 	
 	  VkRect2D scissor = {};
 	  scissor.offset   = {0,0};
-	  scissor.extent   = m_parameters.viewport;
+	  scissor.extent   = extent;
 	
 	  VkPipelineViewportStateCreateInfo viewportState = {};
 	  viewportState.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;

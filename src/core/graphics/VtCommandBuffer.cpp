@@ -87,9 +87,10 @@ void VtCommandBuffer::endRenderPass()
 	vkCmdEndRenderPass(m_commandBuffer);
 }
 
-void VtCommandBuffer::bindPipeline()
+void VtCommandBuffer::bindPipeline(VtPipeline* pVtPipeline)
 {
-	
+	m_tmpPipelineBindPoint = pVtPipeline->getBindPoint();
+	vkCmdBindPipeline(m_commandBuffer, m_tmpPipelineBindPoint, pVtPipeline->getInstance());
 }
 
 void VtCommandBuffer::bindVertexBuffers(std::vector<VkBuffer> buffers, std::vector<VkDeviceSize> offsets)
@@ -115,6 +116,7 @@ void VtCommandBuffer::bindPipelineLayout(VkPipelineLayout* pPipelineLayout)
 
 void VtCommandBuffer::bindDescriptorSet(std::uint32_t firstSet, VkDescriptorSet& set)
 {
+	assert(m_tmpPipelineLayout != nullptr);
   vkCmdBindDescriptorSets(m_commandBuffer, m_tmpPipelineBindPoint, *m_tmpPipelineLayout, firstSet, 1, &set, 0, nullptr);
 }
 
@@ -132,6 +134,46 @@ void VtCommandBuffer::drawIndexed(std::uint32_t indicesCount, std::uint32_t inst
 void VtCommandBuffer::nextSubpass(VkSubpassContents contents)
 {
   vkCmdNextSubpass(m_commandBuffer, contents);
+}
+
+void VtCommandBuffer::copyBuffer(VkBuffer& srcBuffer, VkBuffer& dstBuffer, VkDeviceSize size)
+{
+  begin();
+    VkBufferCopy copyRegion = {};
+    copyRegion.size = size;
+    vkCmdCopyBuffer(m_commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
+  end();
+
+  VkSubmitInfo submitInfo = {};
+  submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+  submitInfo.commandBufferCount = 1;
+  submitInfo.pCommandBuffers    = &m_commandBuffer;
+
+  VkQueue TransferQueue = m_pVtDevices->getQueueByFlags(VK_QUEUE_GRAPHICS_BIT, true);
+	
+  vkQueueSubmit(TransferQueue, 1, &submitInfo, VK_NULL_HANDLE);
+  vkQueueWaitIdle(TransferQueue);
+}
+
+void VtCommandBuffer::copyBuffers(std::vector<VkBuffer> srcBuffers, std::vector<VkBuffer> dstBuffers, std::vector<VkDeviceSize> sizes)
+{
+  begin();
+    VkBufferCopy copyRegion = {};
+    for(unsigned int i = 0; i < sizes.size(); i++)
+    {
+      copyRegion.size = sizes[i];
+      vkCmdCopyBuffer(m_commandBuffer, srcBuffers[i], dstBuffers[i], 1, &copyRegion);
+    }
+  end();
+
+  VkSubmitInfo submitInfo = {};
+  submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+  submitInfo.commandBufferCount = 1;
+  submitInfo.pCommandBuffers    = &m_commandBuffer;
+
+  VkQueue TransferQueue = m_pVtDevices->getQueueByFlags(VK_QUEUE_TRANSFER_BIT, true);
+  vkQueueSubmit(TransferQueue, 1, &submitInfo, VK_NULL_HANDLE);
+  vkQueueWaitIdle(TransferQueue);
 }
 
 //_VtCommandBufferUtil_//

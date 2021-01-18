@@ -16,6 +16,14 @@
 #include "core/graphics/VtFramebuffer.hpp"
 #include "core/graphics/VtDescriptorSet.hpp"
 #include "core/graphics/VtBuffer.hpp"
+#include "core/graphics/VtSubmitQueue.hpp"
+#include "core/VtImporter.hpp"
+#include "core/resources/VtMesh.hpp"
+
+#include "core/io/VtKeyboard.hpp"
+#include "core/io/VtMouse.hpp"
+#include "core/view/VtCamera.hpp"
+#include "core/entities/VtObject.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -189,8 +197,10 @@ int main()
 	pipelineCreateInfo.pVtDevices = &devices;
 
 	VtPipeline mainPipeline{pipelineCreateInfo};
+	mainPipeline.setViewport(appExtent);
 	mainPipeline.setCullFace(VK_CULL_MODE_NONE);
 	mainPipeline.setSamples(devices.getSamplesCount());
+	mainPipeline.setBindPoint(VK_PIPELINE_BIND_POINT_GRAPHICS);
   mainPipeline.build(&mainShader, &mainRenderpass, &mainPipelinelayout);
 
 	VtFramebufferCreateInfo framebufferCreateInfo{};
@@ -219,6 +229,7 @@ int main()
 	VtDescriptorSet mainDescriptorSet{{"MainDescriptor", &devices}};
 	mainDescriptorSet.addBinding({0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER}, mainViewUB.getDescriptorSetInfo());
 	mainDescriptorSet.build(&descriptorPool, &mainDescriptorLayout);
+	mainDescriptorSet.update(); 
 	
 	std::vector<VtDescriptorSet> modelDescriptorSets(swapchain.getImageCount());
 	
@@ -232,15 +243,165 @@ int main()
 	  modelDescriptorSets[i].addBinding({1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER}, modelMaterialUB.getDescriptorSetInfo());
 		
 		modelDescriptorSets[i].build(&descriptorPool, &modelDescriptorLayout);
+		modelDescriptorSets[i].update();
 	}
 
+	VtSubmitQueueCreateInfo submitQueueCreateInfo{};
+	submitQueueCreateInfo.name 				 = "MainSubmitQueue";
+	submitQueueCreateInfo.pVtDevices 	 = &devices;
+	submitQueueCreateInfo.pVtSwapchain = &swapchain;
+	VtSubmitQueue submitQueue{submitQueueCreateInfo};
+
+	VtImporter::LoadInfo modelLoadInfo{};
+	modelLoadInfo.name 				= "Model0";
+	modelLoadInfo.path 				= "../samples/res/models/cube.fbx";
+	modelLoadInfo.assimpflags = aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_FlipUVs;
+
+	VtImporter::FileData modelFileData{};
+	VtImporter::load(modelLoadInfo, modelFileData);
+
+	VtMeshCreateInfo modelMeshCreateInfo{};
+	modelMeshCreateInfo.name 			 = "MainModel";
+	modelMeshCreateInfo.pVtDevices = &devices;
+	VtMesh modelMesh{modelMeshCreateInfo};
+
+	modelMesh.createIndicesBuffer(modelFileData.meshes[0].indices.size()*sizeof(std::uint32_t));
+	modelMesh.createVerticesBuffer("Vertices", modelFileData.meshes[0].vertices.size()*sizeof(float), 0);
+
+	modelMesh.setIndices(modelFileData.meshes[0].indices, commandBuffers[0]);
+	modelMesh.setVertices(0, modelFileData.meshes[0].vertices, commandBuffers[0]);
+	commandBuffers[0].reset();
 
   VtLogHandler::oStream("myproject", "main", "Starting");
 
+  std::vector<VkClearValue> clearValues(3);
+  clearValues[0].color 			  = {0.0f, 0.0f, 0.0f, 1.0f};
+  clearValues[1].depthStencil = {1.0f, 0};
+  clearValues[2].color				= {0.0f, 0.0f, 0.0f, 1.0f};
+
+	for(auto i = 0u; i < swapchain.getImageCount(); i++)
+	{
+		commandBuffers[i].begin();
+		commandBuffers[i].bindPipeline(&mainPipeline);
+
+	  VkRect2D area = {};
+	  area.offset        = {0,0};
+	  area.extent.width  = static_cast<std::uint32_t>(appExtent.x);
+	  area.extent.height = static_cast<std::uint32_t>(appExtent.y);
+
+	  VkRenderPassBeginInfo renderpassInfo = {};
+	  renderpassInfo.sType       = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	  renderpassInfo.renderPass  = mainRenderpass.getInstance(); 
+	  renderpassInfo.framebuffer = framebuffers[i].getInstance();
+	  renderpassInfo.renderArea  = area;
+
+	  renderpassInfo.clearValueCount = static_cast<std::uint32_t>(clearValues.size());
+	  renderpassInfo.pClearValues    = clearValues.data();
+	  
+		commandBuffers[i].beginRenderPass(renderpassInfo, VK_SUBPASS_CONTENTS_INLINE);
+			commandBuffers[i].bindPipelineLayout(&mainPipelinelayout.getInstance());
+			commandBuffers[i].bindDescriptorSet(0, mainDescriptorSet.getInstance());
+			commandBuffers[i].bindDescriptorSet(1, modelDescriptorSets[0].getInstance());
+
+			commandBuffers[i].bindVertexBuffer(modelMesh.getVerticesBuffer(0).getBufferInstance(), {0});
+			commandBuffers[i].bindIndexBuffer(modelMesh.getIndicesBuffer().getBufferInstance(), {0}, VK_INDEX_TYPE_UINT32);
+			commandBuffers[i].drawIndexed(modelMesh.getIndicesCount(), 1);
+		
+		commandBuffers[i].endRenderPass();
+		commandBuffers[i].end();
+	}
+	
+	std::vector<VkCommandBuffer> cbs(3);
+	cbs[0] = commandBuffers[0].getInstance();
+	cbs[1] = commandBuffers[1].getInstance();
+	cbs[2] = commandBuffers[2].getInstance();
+
+	VtKeyboard keyboard{{"MainKeyboard", &window}};
+	VtMouse mouse{{"MainMouse", &window}};
+
+	VtCameraCreateInfo cameraCreateInfo{};
+	cameraCreateInfo.position = glm::vec3{0.0f, 0.0f, -4.0f};
+	cameraCreateInfo.rotation = glm::vec3{0.0f, 0.0f, 0.0f};
+	cameraCreateInfo.zValue   = glm::vec2{0.001f, 1000.0f};
+	
+	VtCamera camera{cameraCreateInfo};
+	camera.createPerspectiveMatrix(90.0f, appExtent.x, appExtent.y);
+	camera.createViewMatrix();
+
+	ViewMatrices matrices{};
+	matrices.viewMatrix = camera.getCopyViewMatrix();
+	matrices.projMatrix = camera.getCopyProjectionMatrix();
+	mainViewUB.mapMemory(&matrices);
+
+	VtObject model{glm::vec3{0.0f}};
+	model.createTransformationMatrix();
+
+	ModelMatrices modelMatrices{};
+	modelMatrices.transformMatrix = model.getCopyTransformation();
+
+	modelTransformUB.mapMemory(&modelMatrices);
+
+	Material materialData{};
+	materialData.ambient = glm::vec4{1.0f};
+	materialData.diffuse = glm::vec4{1.0f, 0.0f, 1.0f, 1.0f};
+	modelMaterialUB.mapMemory(&materialData);
+
+	float cameraSpeed = 0.01f;
+	glm::vec3 nextPos;
+	bool isFocused = false;
+	glm::vec3 direction;
 	while(!window.shouldClose())
 	{
+	
+		if(keyboard.isPressed(GLFW_KEY_W))
+			direction.z += cameraSpeed;
+		else if(keyboard.isPressed(GLFW_KEY_S))
+			direction.z -= cameraSpeed;
+
+		if(keyboard.isPressed(GLFW_KEY_A))
+			direction.x += cameraSpeed;
+		else if(keyboard.isPressed(GLFW_KEY_D))
+			direction.x -= cameraSpeed;
+
+		if(keyboard.isPressed(GLFW_KEY_SPACE))
+			direction.y += cameraSpeed;
+		else if(keyboard.isPressed(GLFW_KEY_Q))
+			direction.y -= cameraSpeed;
+
+		if(keyboard.isPressedOnce(GLFW_KEY_LEFT_CONTROL))
+		{
+			isFocused = !isFocused;
+
+			if(isFocused)
+				mouse.setCursorMode(GLFW_CURSOR_DISABLED);
+			else
+				mouse.setCursorMode(GLFW_CURSOR_NORMAL);
+		}
+
+		if(isFocused)
+		{
+      glm::vec2 rotation = mouse.getMousePosition();
+      camera.VtEntity::setRotation(glm::vec3{-rotation.y / 10, rotation.x / 10, 0});
+		}
+
+		float value = glm::radians(camera.VtEntity::getRefRotation().y);
+    nextPos.x += direction.x * glm::cos(value) - direction.z * glm::sin(value);
+    nextPos.y += direction.y;
+    nextPos.z += direction.z * glm::cos(value) + direction.x * glm::sin(value);
+
+		camera.VtEntity::incPosition(nextPos);
+		camera.createViewMatrix();
+		matrices.viewMatrix = camera.getCopyViewMatrix();
+		mainViewUB.mapMemory(&matrices);
+
+    direction = glm::vec3(0.0f);
+    nextPos *= glm::vec3(0.8f);
+
+		submitQueue.submit(cbs);
 		window.update();
 	}
+
+	devices.waitDevice();
 	
 	VtLogHandler::oStream("myproject", "main", "Ending");
 	return 0;

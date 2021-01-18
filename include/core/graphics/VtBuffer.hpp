@@ -1,5 +1,7 @@
 //_Author : CrappyDevGuy, M12D29Y2020_//
 
+#pragma once
+
 #include "core/VtDevices.hpp"
 
 #include "core/util/VtUtil.hpp"
@@ -51,8 +53,13 @@ class VtBuffer
 
     inline auto getDescriptorSetInfo() noexcept { return VkDescriptorBufferInfo{m_buffer, 0, m_size}; };
 
+    inline auto& getBufferInstance() noexcept { return m_buffer; };
+    inline auto& getMemoryInstance() noexcept { return m_memory; };
+    inline auto& getViewInstance()   noexcept { return m_view;   };
+    inline auto& getName()					 noexcept { return m_name;   };
+
 	private:
-    std::string   m_name;
+    std::string   m_name{"NULL"};
     VkDeviceSize  m_size{0};
     VtDevices*    m_pVtDevices{nullptr};
 

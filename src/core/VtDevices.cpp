@@ -75,6 +75,55 @@ VkFormat VtDevices::getSupportedFormat(std::vector<VkFormat> candidates, VkImage
   return candidates[0];
 }
 
+VkQueue VtDevices::getQueueByFlags(VkQueueFlags flags, bool fullmatch)
+{
+	VkQueue queueFound = nullptr;
+  for(auto i = 0u; i < m_data.queuesData.size(); i++)
+  {
+    if(fullmatch)
+    {
+      std::vector<VkQueueFlags> c_flags = m_data.queuesData[i].enumerateFlags();
+
+
+      if(c_flags[0] == flags)
+        queueFound = m_data.queuesData[i].queue;
+
+    }else
+      if(m_data.queuesData[i].contains(flags))
+        queueFound = m_data.queuesData[i].queue;
+    
+  }
+	if(queueFound == nullptr)
+	{
+	  std::string strflags = VtUtil::VkQueueFlagsToString(flags);
+		VtLogHandler::oStreamWarning("V-Toolbox", m_data.name+"::VtDevices::getQueueByFlags", "couldn't find any queue with the flag : " + strflags);
+		queueFound = m_data.queuesData[0].queue;	
+	}
+
+  return queueFound;
+}
+
+std::uint32_t VtDevices::getQueueIndexByFlags(VkQueueFlags flags, bool fullmatch)
+{
+  for(auto i = 0u; i < m_data.queuesData.size(); i++)
+  {
+    if(fullmatch)
+    {
+      std::vector<VkQueueFlags> c_flags = m_data.queuesData[i].enumerateFlags();
+
+      if(c_flags[0] == flags)
+        return m_data.queuesData[i].index;
+
+    }else
+      if(m_data.queuesData[i].contains(flags))
+        return m_data.queuesData[i].index;   
+  }
+  std::string strflags = VtUtil::VkQueueFlagsToString(flags);
+
+ 	VtLogHandler::oStreamWarning("V-Toolbox", m_data.name+"::VtDevices::getQueueIndexByFlags", "couldn't find any queue with the flag : " + strflags);
+  return m_data.queuesData[0].index;
+}
+
 //_ Private Functions _//
 void VtDevices::buildLogicalDevice(VkPhysicalDeviceFeatures features)
 {
@@ -115,6 +164,12 @@ void VtDevices::buildLogicalDevice(VkPhysicalDeviceFeatures features)
   VtUtil::checkVulkanResult(m_data.name+"::VtDevices::vkCreateDevice", vkCreateDevice(m_physicalDevice, &createInfo, nullptr, &m_logicalDevice));
 
   volkLoadDevice(m_logicalDevice);
+  
+  for(unsigned int i = 0; i < m_data.queuesData.size(); i++)
+  {
+    vkGetDeviceQueue(m_logicalDevice, queueFamilies[i], 0, &m_data.queuesData[i].queue);
+  }
+  
 	VtLogHandler::oStreamDebug("V-Toolbox", m_data.name+"::VtDevices::buildLogicalDevice", "Success to create");
 }
 
