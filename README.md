@@ -11,4 +11,4 @@ this project is written in C++, if you found the code ugly the reason is explain
 First Renderering
 -----------------
 
-![Cube](https://github.com/CrappyDevGuy/V-Toolbox/main/rendering/2021-01-18-193908_800x600_scrot.png)
+![Cube](https://raw.githubusercontent.com/CrappyDevGuy/V-Toolbox/main/rendering/2021-01-18-193908_800x600_scrot.png)
