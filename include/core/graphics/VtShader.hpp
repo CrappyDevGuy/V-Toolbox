@@ -70,6 +70,8 @@ class VtShader
     VkPipelineShaderStageCreateInfo getFragmentShaderStage();
     VkPipelineShaderStageCreateInfo getGeometryShaderStage();
 
+    VkPipelineVertexInputStateCreateInfo getPipelineVertexInputState();
+
 	private:
 		void createShaderModule(VkShaderModule& module, const std::string type, const std::vector<char>& code);
 		void destroyShaderModule(VkShaderModule* module, const std::string type);

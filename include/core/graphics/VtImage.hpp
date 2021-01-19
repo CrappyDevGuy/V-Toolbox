@@ -54,7 +54,7 @@ class VtImage
     void loadImage(VkCommandBuffer& commandBuffer, std::string path);
     void generateMipMaps(VkCommandBuffer& commandBuffer);
 
-     inline void setImage(VkImage image) 
+    inline void setImage(VkImage image) noexcept
     { m_image = std::move(image); };
     
     inline VkImage&           getImage()        		  noexcept { return m_image;             };

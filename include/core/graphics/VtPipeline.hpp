@@ -15,18 +15,18 @@ struct VtPipelineCreateInfo
 
 class VtPipeline
 {
-	struct InternalData
+	struct InternalState
 	{
-		
-    glm::ivec2      			viewport    = {800,600};
-    VkBool32        			blend       = VK_FALSE;
-      
-    VkCullModeFlags       cullFace    = VK_CULL_MODE_FRONT_BIT;
-    VkPolygonMode         polygonMode = VK_POLYGON_MODE_FILL;
-    float                 lineWidth   = 1.0f;
-    VkSampleCountFlagBits msaaValue   = VK_SAMPLE_COUNT_1_BIT;
+	  VkPipelineRasterizationStateCreateInfo razCreate{};
+	  VkPipelineMultisampleStateCreateInfo   msCreate{};
+		VkPipelineDepthStencilStateCreateInfo  depthStencil{};
+	  VkPipelineColorBlendAttachmentState    colorBlendAttachment{};
+		VkPipelineColorBlendStateCreateInfo    colorBlending{};
+		VkPipelineInputAssemblyStateCreateInfo inAsmCreate{};
 
-    VkPipelineBindPoint		bindPoint	  = VK_PIPELINE_BIND_POINT_GRAPHICS;
+		VkRect2D 						scissor{};
+		VkViewport 					viewport{};
+		VkPipelineBindPoint bindPoint;
 	};
 
 	public:
@@ -39,21 +39,28 @@ class VtPipeline
 		VtPipeline& operator=(VtPipeline&& other) noexcept;
 		VtPipeline(VtPipeline&& other) noexcept;
 
-
-		inline void setSamples(VkSampleCountFlagBits v) noexcept { m_parameters.msaaValue = v; };
-		inline void setCullFace(VkCullModeFlags v)      noexcept { m_parameters.cullFace  = v; };
-		inline void setViewport(glm::ivec2 v)						noexcept { m_parameters.viewport  = v; };
-		inline void setBindPoint(VkPipelineBindPoint v) noexcept { m_parameters.bindPoint = v; };
-
-		inline auto& getInstance()  const noexcept { return m_pipeline; 						};
-		inline auto  getBindPoint() const noexcept { return m_parameters.bindPoint; };
-
+		inline auto& getInstance()  const noexcept { return m_pipeline; 			  };
+		inline auto  getBindPoint() const noexcept { return m_states.bindPoint; };
+				
 		void build(VtShader* pVtShader, VtRenderpass* pVtRenderpass, VtPipelineLayout* pVtPipelineLayout);
+
+		void setViewport(glm::ivec2 viewport)    noexcept;
+		void setViewport(VkExtent2D viewport)    noexcept;
+		void setScissorExtent(glm::ivec2 extent) noexcept;
+		void setScissorExtent(VkExtent2D extent) noexcept;
+		
+		void setPolygonMode(VkPolygonMode v)			    noexcept { m_states.razCreate.polygonMode 			  = v; };
+		void setSamplesCount(VkSampleCountFlagBits v) noexcept { m_states.msCreate.rasterizationSamples = v; };
+		void setCullMode(VkCullModeFlags v)			 			noexcept { m_states.razCreate.cullMode 	  			  = v; };
+		void setBindPoint(VkPipelineBindPoint v) 			noexcept { m_states.bindPoint 				 	  			  = v; };
+
+	private:
+		void populateStateStructure();
 
 	private:
 		std::string m_name{"NULL"};
 		VtDevices*  m_pVtDevices{nullptr};
     VkPipeline  m_pipeline{nullptr};
 
-    VtPipeline::InternalData m_parameters;
+    VtPipeline::InternalState m_states{};
 };

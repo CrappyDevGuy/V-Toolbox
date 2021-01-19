@@ -28,7 +28,7 @@ class VtCommandBuffer
 		inline void bindCommandPool(VtCommandPool* pVtCommandPool)
 		{ assert(pVtCommandPool != nullptr); m_pVtCommandPool = pVtCommandPool; };
 
-		inline auto& getInstance() const noexcept { return m_commandBuffer; };
+		inline auto& getInstance() noexcept { return m_commandBuffer; };
 
 		void alloc(VtCommandPool* pVtCommandPool);
 		void free();

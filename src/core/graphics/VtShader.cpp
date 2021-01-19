@@ -91,6 +91,26 @@ VkPipelineShaderStageCreateInfo VtShader::getGeometryShaderStage()
   return std::move(createInfo);
 }
 
+VkPipelineVertexInputStateCreateInfo VtShader::getPipelineVertexInputState()
+{  
+  VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
+  vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+  if(!m_shaderInput.isEmpty())
+  {
+    vertexInputInfo.vertexBindingDescriptionCount   = m_shaderInput.getBindingsSize();
+    vertexInputInfo.vertexAttributeDescriptionCount = m_shaderInput.getAttributesSize();
+    vertexInputInfo.pVertexBindingDescriptions      = m_shaderInput.getBindingInfo().data();
+    vertexInputInfo.pVertexAttributeDescriptions    = m_shaderInput.getAttributesInfo().data();
+  }else
+  {
+    vertexInputInfo.vertexBindingDescriptionCount   = 0;
+    vertexInputInfo.vertexAttributeDescriptionCount = 0;
+    vertexInputInfo.pVertexBindingDescriptions      = nullptr;
+    vertexInputInfo.pVertexAttributeDescriptions    = nullptr;
+  }
+  return vertexInputInfo;
+}
+
 //_ Private Functions _//
 
 void VtShader::createShaderModule(VkShaderModule& module, const std::string type, const std::vector<char>& code)

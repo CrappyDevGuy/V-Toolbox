@@ -24,6 +24,7 @@
 #include "core/io/VtMouse.hpp"
 #include "core/view/VtCamera.hpp"
 #include "core/entities/VtObject.hpp"
+#include "core/graphics/VtSampler.hpp"
 
 #include <iostream>
 #include <iomanip>
@@ -45,6 +46,14 @@ struct Material
 {
 	glm::vec4 ambient;
 	glm::vec4 diffuse;
+	float     textureFactor;
+};
+
+struct Light
+{
+	glm::vec4 position;
+	glm::vec4 diffuse;
+	glm::vec4 specular;
 };
 
 int main()
@@ -115,7 +124,8 @@ int main()
 	descriptorPoolCreateInfo.setsCount  = 1000;
 	descriptorPoolCreateInfo.pVtDevices = &devices;
 	descriptorPoolCreateInfo.poolsData  = {
-		{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000}
+		{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000},
+		{VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000}
 	};
 
 	VtDescriptorPool descriptorPool{descriptorPoolCreateInfo};
@@ -125,6 +135,8 @@ int main()
 	shaderInput.addBinding(0, VK_VERTEX_INPUT_RATE_VERTEX, 3*sizeof(float));
 	shaderInput.addInput(1, 1, VK_FORMAT_R32G32B32_SFLOAT, 0);
 	shaderInput.addBinding(1, VK_VERTEX_INPUT_RATE_VERTEX, 3*sizeof(float));
+	shaderInput.addInput(2, 2, VK_FORMAT_R32G32B32_SFLOAT, 0);
+	shaderInput.addBinding(2, VK_VERTEX_INPUT_RATE_VERTEX, 2*sizeof(float));
 
 	VtShaderCreateInfo shaderCreateInfo{};
 	shaderCreateInfo.name        = "MainShader";
@@ -177,12 +189,17 @@ int main()
 	descriptorLayoutCreateInfo.name       = "ModelDescriptorLayout";
 	VtDescriptorLayout modelDescriptorLayout{descriptorLayoutCreateInfo};
 
-	mainDescriptorLayout.addBinding({0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, VK_SHADER_STAGE_VERTEX_BIT});
+	mainDescriptorLayout.addBindings({
+		{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, VK_SHADER_STAGE_VERTEX_BIT}, 
+		{1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, VK_SHADER_STAGE_FRAGMENT_BIT}
+	});
 	mainDescriptorLayout.build();
 
 	modelDescriptorLayout.addBindings({
 		{0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, VK_SHADER_STAGE_VERTEX_BIT},
-		{1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, VK_SHADER_STAGE_FRAGMENT_BIT}
+		{1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, VK_SHADER_STAGE_FRAGMENT_BIT},
+		{2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_FRAGMENT_BIT}
+
 	});
 	modelDescriptorLayout.build();
 
@@ -201,9 +218,12 @@ int main()
 
 	VtPipeline mainPipeline{pipelineCreateInfo};
 	mainPipeline.setViewport(appExtent);
-	mainPipeline.setCullFace(VK_CULL_MODE_NONE);
-	mainPipeline.setSamples(devices.getSamplesCount());
+	mainPipeline.setScissorExtent(appExtent);
+
+	mainPipeline.setCullMode(VK_CULL_MODE_NONE);
+	mainPipeline.setSamplesCount(devices.getSamplesCount());
 	mainPipeline.setBindPoint(VK_PIPELINE_BIND_POINT_GRAPHICS);
+	
   mainPipeline.build(&mainShader, &mainRenderpass, &mainPipelinelayout);
 
 	VtFramebufferCreateInfo framebufferCreateInfo{};
@@ -225,11 +245,26 @@ int main()
 		framebuffers[i] = {framebufferCreateInfo};
 	}
 
-	VtBuffer mainViewUB{{"mainViewUB", &devices, sizeof(ViewMatrices), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT}};
+	VtBuffer mainViewUB{{"mainViewUBO", &devices, sizeof(ViewMatrices), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT}};
 	VtBuffer modelTransformUB{{"ModelTransformUBO", &devices, sizeof(ModelMatrices), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT}};
+	VtBuffer lightUB{{"LightUBO", &devices, sizeof(Light), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT}};
+
+	Light lightData = {
+		glm::vec4{2.0f, 4.0f, -2.0f, 1.0f},
+		glm::vec4{1.0f, 1.0f, 1.0f, 1.0f},
+		glm::vec4{1.0f, 1.0f, 1.0f, 1.0f}
+	};
+	lightUB.mapMemory(&lightData);
+
+
+	VtSampler sampler{{"MainSampler", &devices}};
+	sampler.setWrapMode(VK_SAMPLER_ADDRESS_MODE_REPEAT);
+	sampler.setAnisotropicLevel(5);
+	sampler.build();
 
 	VtDescriptorSet mainDescriptorSet{{"MainDescriptor", &devices}};
 	mainDescriptorSet.addBinding({0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER}, mainViewUB.getDescriptorSetInfo());
+	mainDescriptorSet.addBinding({1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER}, lightUB.getDescriptorSetInfo());
 	mainDescriptorSet.build(&descriptorPool, &mainDescriptorLayout);
 	mainDescriptorSet.update(); 
 	
@@ -251,27 +286,52 @@ int main()
 	std::vector<VtBuffer> modelMaterials(meshesCount);
 	std::vector<VtMesh> modelMeshes(meshesCount);
 	std::vector<VtDescriptorSet> modelMeshesDescriptor(meshesCount);
+	std::vector<VtImage> modelMeshesTextures(meshesCount);
 
+
+	VtImage defaultTexture = {{"DefaultTexture", &devices, swapchain.getImageFormat()}};
+	defaultTexture.loadImage(commandBuffers[0].getInstance(), "../samples/res/textures/default.jpg");
+		
 	for(auto i =0u; i < meshesCount; i++)
 	{
-		Material materialData{};
-		materialData.ambient = glm::vec4{0.2f};
-		materialData.diffuse = glm::vec4{modelFileData.materials[i].diffuse, 1.0f};
-		modelMaterials[i] = {{"modelMaterials["+std::to_string(i)+"]", &devices, sizeof(Material), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT}};
-		modelMaterials[i].mapMemory(&materialData);
-
 		modelMeshes[i] = {{"Mesh[" + std::to_string(i) + "]", &devices}};
 		modelMeshes[i].createIndicesBuffer(modelFileData.meshes[i].indices.size()*sizeof(std::uint32_t));
 		modelMeshes[i].createVerticesBuffer("Vertices", modelFileData.meshes[i].vertices.size()*sizeof(float), 0);
 		modelMeshes[i].createVerticesBuffer("Normals", modelFileData.meshes[i].normals.size()*sizeof(float), 0);
+		modelMeshes[i].createVerticesBuffer("TexturesCoords", modelFileData.meshes[i].textureCoords.size()*sizeof(float), 0);
 
 		modelMeshes[i].setIndices(modelFileData.meshes[i].indices, commandBuffers[0]);
 		modelMeshes[i].setVertices(0, modelFileData.meshes[i].vertices, commandBuffers[0]);
 		modelMeshes[i].setVertices(1, modelFileData.meshes[i].normals, commandBuffers[0]);
+		modelMeshes[i].setVertices(2, modelFileData.meshes[i].textureCoords, commandBuffers[0]);
+
+		std::string texturePath = modelFileData.materials[i].texturesName[VtImporter::Textures::Diffuse];
+		std::uint32_t textureFactor = 1;
+
+		VkDescriptorImageInfo textureBindingInfo{};
+		textureBindingInfo.sampler     = sampler.getInstance();
+		textureBindingInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		if(texturePath != "") {
+			std::string respath = "../samples/res/textures/"+texturePath;
+			textureFactor = 1;
+			modelMeshesTextures[i] = {{"TextureMeshes["+std::to_string(i)+"]", &devices, swapchain.getImageFormat()}};
+			modelMeshesTextures[i].loadImage(commandBuffers[0].getInstance(), respath);
+			
+			textureBindingInfo.imageView = modelMeshesTextures[i].getImageView();
+		} else
+			textureBindingInfo.imageView = defaultTexture.getImageView();
+		
+		Material materialData{};
+		materialData.ambient 			 = glm::vec4{0.4f};
+		materialData.diffuse 			 = glm::vec4{modelFileData.materials[i].diffuse, 1.0f};
+		materialData.textureFactor = textureFactor;
+		modelMaterials[i] = {{"modelMaterials["+std::to_string(i)+"]", &devices, sizeof(Material), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT}};
+		modelMaterials[i].mapMemory(&materialData);
 
 		modelMeshesDescriptor[i] = {{"ModelDescriptorSet["+std::to_string(i)+"]", &devices}};
 		modelMeshesDescriptor[i].addBinding({0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER}, modelTransformUB.getDescriptorSetInfo());
 	  modelMeshesDescriptor[i].addBinding({1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER}, modelMaterials[i].getDescriptorSetInfo());
+		modelMeshesDescriptor[i].addBinding({2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER}, textureBindingInfo);
 		modelMeshesDescriptor[i].build(&descriptorPool, &modelDescriptorLayout);
 		modelMeshesDescriptor[i].update();
 	}
@@ -312,10 +372,11 @@ int main()
 
 				auto buffers = {
 												modelMeshes[j].getVerticesBuffer(0).getBufferInstance(),
-												modelMeshes[j].getVerticesBuffer(1).getBufferInstance()
+												modelMeshes[j].getVerticesBuffer(1).getBufferInstance(),
+												modelMeshes[j].getVerticesBuffer(2).getBufferInstance()
 											 };
 
-				commandBuffers[i].bindVertexBuffers(buffers, {0, 0});
+				commandBuffers[i].bindVertexBuffers(buffers, {0, 0, 0});
 				commandBuffers[i].bindIndexBuffer(modelMeshes[j].getIndicesBuffer().getBufferInstance(), {0}, VK_INDEX_TYPE_UINT32);
 				commandBuffers[i].drawIndexed(modelMeshes[j].getIndicesCount(), 1);
 			}
