@@ -51,7 +51,7 @@ void VtDescriptorSet::build(VtDescriptorPool* pVtDescriptorPool, VtDescriptorLay
   VkResult res = vkAllocateDescriptorSets(m_pVtDevices->getLogicalDevice(), &allocInfo, &m_descriptor);
 	VtUtil::checkVulkanResult(m_name+"::VtDescriptorSet::build", res);
 
-	VtLogHandler::oStreamDebug("V-Toolbox", m_name+"::VtDescriptorSet::build", "Success to create");
+	VtLogHandler::oStreamDebug("V-Toolbox", m_name+"::VtDescriptorSet::build", "Success to build");
 }
 
 void VtDescriptorSet::update()

@@ -28,7 +28,7 @@
 #include <iostream>
 #include <iomanip>
 
-constexpr static glm::ivec2 appExtent{800, 600};
+constexpr static glm::ivec2 appExtent{1280, 720};
 
 struct ViewMatrices
 {
@@ -85,6 +85,7 @@ int main()
 	swapchainCreateInfo.pVtWindow   = &window;
 	swapchainCreateInfo.pVtDevices  = &devices;
 	swapchainCreateInfo.presentMode = VK_PRESENT_MODE_MAILBOX_KHR;
+//	swapchainCreateInfo.presentMode = VK_PRESENT_MODE_IMMEDIATE_KHR;
 
 	VtSwapchain swapchain{swapchainCreateInfo};
 
@@ -111,10 +112,10 @@ int main()
 
 	VtDescriptorPoolCreateInfo descriptorPoolCreateInfo{};
 	descriptorPoolCreateInfo.name       = "MainDescriptorPool";
-	descriptorPoolCreateInfo.setsCount  = 4;
+	descriptorPoolCreateInfo.setsCount  = 1000;
 	descriptorPoolCreateInfo.pVtDevices = &devices;
 	descriptorPoolCreateInfo.poolsData  = {
-		{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 10}
+		{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000}
 	};
 
 	VtDescriptorPool descriptorPool{descriptorPoolCreateInfo};
@@ -122,6 +123,8 @@ int main()
 	VtShaderInput shaderInput{};
 	shaderInput.addInput(0, 0, VK_FORMAT_R32G32B32_SFLOAT, 0);
 	shaderInput.addBinding(0, VK_VERTEX_INPUT_RATE_VERTEX, 3*sizeof(float));
+	shaderInput.addInput(1, 1, VK_FORMAT_R32G32B32_SFLOAT, 0);
+	shaderInput.addBinding(1, VK_VERTEX_INPUT_RATE_VERTEX, 3*sizeof(float));
 
 	VtShaderCreateInfo shaderCreateInfo{};
 	shaderCreateInfo.name        = "MainShader";
@@ -224,28 +227,12 @@ int main()
 
 	VtBuffer mainViewUB{{"mainViewUB", &devices, sizeof(ViewMatrices), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT}};
 	VtBuffer modelTransformUB{{"ModelTransformUBO", &devices, sizeof(ModelMatrices), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT}};
-	VtBuffer modelMaterialUB{{"modelMaterialUB", &devices, sizeof(Material), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT}};
 
 	VtDescriptorSet mainDescriptorSet{{"MainDescriptor", &devices}};
 	mainDescriptorSet.addBinding({0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER}, mainViewUB.getDescriptorSetInfo());
 	mainDescriptorSet.build(&descriptorPool, &mainDescriptorLayout);
 	mainDescriptorSet.update(); 
 	
-	std::vector<VtDescriptorSet> modelDescriptorSets(swapchain.getImageCount());
-	
-	VtDescriptorSetCreateInfo descriptorSetCreateInfo{};
-	descriptorSetCreateInfo.pVtDevices = &devices;
-	for(auto i=0u; i < modelDescriptorSets.size(); i++)
-	{
-		descriptorSetCreateInfo.name = "DescriptorSet[" + std::to_string(i) + "]";
-		modelDescriptorSets[i] = {descriptorSetCreateInfo};
-		modelDescriptorSets[i].addBinding({0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER}, modelTransformUB.getDescriptorSetInfo());
-	  modelDescriptorSets[i].addBinding({1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER}, modelMaterialUB.getDescriptorSetInfo());
-		
-		modelDescriptorSets[i].build(&descriptorPool, &modelDescriptorLayout);
-		modelDescriptorSets[i].update();
-	}
-
 	VtSubmitQueueCreateInfo submitQueueCreateInfo{};
 	submitQueueCreateInfo.name 				 = "MainSubmitQueue";
 	submitQueueCreateInfo.pVtDevices 	 = &devices;
@@ -254,25 +241,42 @@ int main()
 
 	VtImporter::LoadInfo modelLoadInfo{};
 	modelLoadInfo.name 				= "Model0";
-	modelLoadInfo.path 				= "../samples/res/models/cube.fbx";
+	modelLoadInfo.path 				= "../samples/res/models/scene.fbx";
 	modelLoadInfo.assimpflags = aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_FlipUVs;
 
 	VtImporter::FileData modelFileData{};
 	VtImporter::load(modelLoadInfo, modelFileData);
 
-	VtMeshCreateInfo modelMeshCreateInfo{};
-	modelMeshCreateInfo.name 			 = "MainModel";
-	modelMeshCreateInfo.pVtDevices = &devices;
-	VtMesh modelMesh{modelMeshCreateInfo};
+	auto meshesCount = modelFileData.meshes.size();
+	std::vector<VtBuffer> modelMaterials(meshesCount);
+	std::vector<VtMesh> modelMeshes(meshesCount);
+	std::vector<VtDescriptorSet> modelMeshesDescriptor(meshesCount);
 
-	modelMesh.createIndicesBuffer(modelFileData.meshes[0].indices.size()*sizeof(std::uint32_t));
-	modelMesh.createVerticesBuffer("Vertices", modelFileData.meshes[0].vertices.size()*sizeof(float), 0);
+	for(auto i =0u; i < meshesCount; i++)
+	{
+		Material materialData{};
+		materialData.ambient = glm::vec4{0.2f};
+		materialData.diffuse = glm::vec4{modelFileData.materials[i].diffuse, 1.0f};
+		modelMaterials[i] = {{"modelMaterials["+std::to_string(i)+"]", &devices, sizeof(Material), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT}};
+		modelMaterials[i].mapMemory(&materialData);
 
-	modelMesh.setIndices(modelFileData.meshes[0].indices, commandBuffers[0]);
-	modelMesh.setVertices(0, modelFileData.meshes[0].vertices, commandBuffers[0]);
+		modelMeshes[i] = {{"Mesh[" + std::to_string(i) + "]", &devices}};
+		modelMeshes[i].createIndicesBuffer(modelFileData.meshes[i].indices.size()*sizeof(std::uint32_t));
+		modelMeshes[i].createVerticesBuffer("Vertices", modelFileData.meshes[i].vertices.size()*sizeof(float), 0);
+		modelMeshes[i].createVerticesBuffer("Normals", modelFileData.meshes[i].normals.size()*sizeof(float), 0);
+
+		modelMeshes[i].setIndices(modelFileData.meshes[i].indices, commandBuffers[0]);
+		modelMeshes[i].setVertices(0, modelFileData.meshes[i].vertices, commandBuffers[0]);
+		modelMeshes[i].setVertices(1, modelFileData.meshes[i].normals, commandBuffers[0]);
+
+		modelMeshesDescriptor[i] = {{"ModelDescriptorSet["+std::to_string(i)+"]", &devices}};
+		modelMeshesDescriptor[i].addBinding({0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER}, modelTransformUB.getDescriptorSetInfo());
+	  modelMeshesDescriptor[i].addBinding({1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER}, modelMaterials[i].getDescriptorSetInfo());
+		modelMeshesDescriptor[i].build(&descriptorPool, &modelDescriptorLayout);
+		modelMeshesDescriptor[i].update();
+	}
+
 	commandBuffers[0].reset();
-
-  VtLogHandler::oStream("myproject", "main", "Starting");
 
   std::vector<VkClearValue> clearValues(3);
   clearValues[0].color 			  = {0.0f, 0.0f, 0.0f, 1.0f};
@@ -301,11 +305,20 @@ int main()
 		commandBuffers[i].beginRenderPass(renderpassInfo, VK_SUBPASS_CONTENTS_INLINE);
 			commandBuffers[i].bindPipelineLayout(&mainPipelinelayout.getInstance());
 			commandBuffers[i].bindDescriptorSet(0, mainDescriptorSet.getInstance());
-			commandBuffers[i].bindDescriptorSet(1, modelDescriptorSets[0].getInstance());
 
-			commandBuffers[i].bindVertexBuffer(modelMesh.getVerticesBuffer(0).getBufferInstance(), {0});
-			commandBuffers[i].bindIndexBuffer(modelMesh.getIndicesBuffer().getBufferInstance(), {0}, VK_INDEX_TYPE_UINT32);
-			commandBuffers[i].drawIndexed(modelMesh.getIndicesCount(), 1);
+			for(auto j = 0; j < meshesCount; j++)
+			{
+				commandBuffers[i].bindDescriptorSet(1, modelMeshesDescriptor[j].getInstance());
+
+				auto buffers = {
+												modelMeshes[j].getVerticesBuffer(0).getBufferInstance(),
+												modelMeshes[j].getVerticesBuffer(1).getBufferInstance()
+											 };
+
+				commandBuffers[i].bindVertexBuffers(buffers, {0, 0});
+				commandBuffers[i].bindIndexBuffer(modelMeshes[j].getIndicesBuffer().getBufferInstance(), {0}, VK_INDEX_TYPE_UINT32);
+				commandBuffers[i].drawIndexed(modelMeshes[j].getIndicesCount(), 1);
+			}
 		
 		commandBuffers[i].endRenderPass();
 		commandBuffers[i].end();
@@ -320,9 +333,9 @@ int main()
 	VtMouse mouse{{"MainMouse", &window}};
 
 	VtCameraCreateInfo cameraCreateInfo{};
-	cameraCreateInfo.position = glm::vec3{0.0f, 0.0f, -4.0f};
-	cameraCreateInfo.rotation = glm::vec3{0.0f, 0.0f, 0.0f};
-	cameraCreateInfo.zValue   = glm::vec2{0.001f, 1000.0f};
+	cameraCreateInfo.position = glm::vec3{-2.0f, 2.0f, -2.0f};
+	cameraCreateInfo.rotation = glm::vec3{-35.0f, -45.0f, 0.0f};
+	cameraCreateInfo.zValue   = glm::vec2{0.001f, 500.0f};
 	
 	VtCamera camera{cameraCreateInfo};
 	camera.createPerspectiveMatrix(90.0f, appExtent.x, appExtent.y);
@@ -333,72 +346,108 @@ int main()
 	matrices.projMatrix = camera.getCopyProjectionMatrix();
 	mainViewUB.mapMemory(&matrices);
 
-	VtObject model{glm::vec3{0.0f}};
+	VtObject model{glm::vec3{0.0f}, glm::vec3{-90.0f, 0.0f, 0.0f}};
 	model.createTransformationMatrix();
 
 	ModelMatrices modelMatrices{};
 	modelMatrices.transformMatrix = model.getCopyTransformation();
-
 	modelTransformUB.mapMemory(&modelMatrices);
 
-	Material materialData{};
-	materialData.ambient = glm::vec4{1.0f};
-	materialData.diffuse = glm::vec4{1.0f, 0.0f, 1.0f, 1.0f};
-	modelMaterialUB.mapMemory(&materialData);
+  VtLogHandler::oStream("myproject", "main", "Starting");
 
 	float cameraSpeed = 0.01f;
 	glm::vec3 nextPos;
 	bool isFocused = false;
 	glm::vec3 direction;
+
+
+  double previousTime = glfwGetTime();
+  int frameCount = 0, tickCount = 0;
+
+  double tickCap = 1.0f / 60.0f;
+  float lastTick = 0.0f;
+
+  double frameCap = 1.0f / 75.0f;
+  float lastFrame = 0.0f;
+	
 	while(!window.shouldClose())
 	{
-	
-		if(keyboard.isPressed(GLFW_KEY_W))
-			direction.z += cameraSpeed;
-		else if(keyboard.isPressed(GLFW_KEY_S))
-			direction.z -= cameraSpeed;
 
-		if(keyboard.isPressed(GLFW_KEY_A))
-			direction.x += cameraSpeed;
-		else if(keyboard.isPressed(GLFW_KEY_D))
-			direction.x -= cameraSpeed;
-
-		if(keyboard.isPressed(GLFW_KEY_SPACE))
-			direction.y += cameraSpeed;
-		else if(keyboard.isPressed(GLFW_KEY_Q))
-			direction.y -= cameraSpeed;
-
-		if(keyboard.isPressedOnce(GLFW_KEY_LEFT_CONTROL))
+		if(glfwGetTime() - lastTick >= tickCap)
 		{
-			isFocused = !isFocused;
+			if(keyboard.isPressed(GLFW_KEY_W))
+				direction.z += cameraSpeed;
+			else if(keyboard.isPressed(GLFW_KEY_S))
+				direction.z -= cameraSpeed;
+
+			if(keyboard.isPressed(GLFW_KEY_A))
+				direction.x += cameraSpeed;
+			else if(keyboard.isPressed(GLFW_KEY_D))
+				direction.x -= cameraSpeed;
+
+			if(keyboard.isPressed(GLFW_KEY_SPACE))
+				direction.y += cameraSpeed;
+			else if(keyboard.isPressed(GLFW_KEY_Q))
+				direction.y -= cameraSpeed;
+
+			if(keyboard.isPressedOnce(GLFW_KEY_LEFT_CONTROL))
+			{
+				isFocused = !isFocused;
+
+				if(isFocused)
+					mouse.setCursorMode(GLFW_CURSOR_DISABLED);
+				else
+					mouse.setCursorMode(GLFW_CURSOR_NORMAL);
+			}
 
 			if(isFocused)
-				mouse.setCursorMode(GLFW_CURSOR_DISABLED);
-			else
-				mouse.setCursorMode(GLFW_CURSOR_NORMAL);
-		}
+			{
+	      glm::vec2 rotation = mouse.getMousePosition();
+	      camera.VtEntity::setRotation(glm::vec3{-rotation.y / 10, rotation.x / 10, 0});
+			}
 
-		if(isFocused)
-		{
-      glm::vec2 rotation = mouse.getMousePosition();
-      camera.VtEntity::setRotation(glm::vec3{-rotation.y / 10, rotation.x / 10, 0});
-		}
+			float value = glm::radians(camera.VtEntity::getRefRotation().y);
+	    nextPos.x += direction.x * glm::cos(value) - direction.z * glm::sin(value);
+	    nextPos.y += direction.y;
+	    nextPos.z += direction.z * glm::cos(value) + direction.x * glm::sin(value);
 
-		float value = glm::radians(camera.VtEntity::getRefRotation().y);
-    nextPos.x += direction.x * glm::cos(value) - direction.z * glm::sin(value);
-    nextPos.y += direction.y;
-    nextPos.z += direction.z * glm::cos(value) + direction.x * glm::sin(value);
+			camera.VtEntity::incPosition(nextPos);
+			camera.createViewMatrix();
+			matrices.viewMatrix = camera.getCopyViewMatrix();
+			mainViewUB.mapMemory(&matrices);
 
-		camera.VtEntity::incPosition(nextPos);
-		camera.createViewMatrix();
-		matrices.viewMatrix = camera.getCopyViewMatrix();
-		mainViewUB.mapMemory(&matrices);
+	    direction = glm::vec3(0.0f);
+	    nextPos *= glm::vec3(0.8f);
+	    
+      tickCount++;
+      lastTick += tickCap;
+    }
 
-    direction = glm::vec3(0.0f);
-    nextPos *= glm::vec3(0.8f);
-
-		submitQueue.submit(cbs);
 		window.update();
+		if(glfwGetTime() - lastFrame >= frameCap)
+    {
+			submitQueue.submit(cbs);
+      frameCount++;
+      lastFrame += frameCap;
+    }
+
+    double currentTime = glfwGetTime();
+
+    if(currentTime - previousTime >= 1.0)
+    {
+      double time = currentTime-previousTime;
+
+			auto camPos = camera.VtEntity::getRefPosition();
+			auto camRot = camera.VtEntity::getRefRotation();
+			std::string pos = "{"+std::to_string(camPos.x)+", "+std::to_string(camPos.y)+", "+std::to_string(camPos.z)+"}";
+			std::string rot = "{"+std::to_string(camRot.x)+", "+std::to_string(camRot.y)+", "+std::to_string(camRot.z)+"}";
+		
+      std::string info = "FPS : " + std::to_string(frameCount) + " | TPS : " + std::to_string(tickCount) + " | " + pos + " | " + rot;
+      VtLogHandler::oStream("myproject", "main", info);
+      frameCount = 0;
+      tickCount = 0;
+      previousTime = currentTime;
+    }
 	}
 
 	devices.waitDevice();
